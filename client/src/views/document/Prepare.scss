@@ -1,0 +1,222 @@
+.control-actions {
+  button {
+    height: 43px;
+  }
+  select {
+    height: 43px !important;
+  }
+}
+.sign-items {
+  width: 100%;
+  height: 200px;
+  background: gray;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.doc-layout{
+  max-height: calc(100vh - 251px);
+  height: 100%;
+  overflow-y: auto;
+}
+.doc-container {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  padding: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  // bottom: 0;
+  z-index: 2;
+
+  min-height: 200px;
+  .doc-control {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 145px;
+    margin: 5px 8px;
+    flex-direction: column;
+    &:hover {
+      cursor: pointer;
+    }
+    .doc-item {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      .doc-item-control {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 125px;
+        height: 35px;
+        border-radius: 4px;
+        border: solid 1px black;
+        background-color: #ffffff;
+        margin: 0 2px;
+      }
+      i.control {
+        color: #9ea0a5;
+        &:hover {
+          cursor: pointer;
+          color: #8a6454;
+        }
+      }
+
+      .color-signature {
+        color: #ee9964;
+        border-color: #ee9964;
+      }
+      .color-full-name {
+        color: #60ccd8;
+        border-color: #60ccd8;
+      }
+      .color-company {
+        color: #d5c45c;
+        border-color: #d5c45c;
+      }
+      .color-title {
+        color: #ee9964;
+        border-color: #ee9964;
+      }
+      .color-text {
+        color: #60ccd8;
+        border-color: #60ccd8;
+      }
+      .color-date-signed {
+        color: #d5c45c;
+        border-color: #d5c45c;
+      }
+      .color-attachment {
+        color: #ee9964;
+        border-color: #ee9964;
+      }
+      .icon {
+        color: #dedede;
+        width: 28px;
+        height: 28px;
+        font-size: 23px;
+        margin-top: 7px;
+      }
+    }
+    .who-fill {
+      width: 100%;
+      padding: 15px 10px;
+      border: solid 1px #ebebeb;
+      background-color: #fcfafa;
+      position: relative;
+      input {
+        height: 30px;
+      }
+      .add-one-more {
+        color: #9ea0a5;
+      }
+      .arrow-popover {
+        position: absolute;
+        display: block;
+        width: 1rem;
+        height: 0.5rem;
+        margin: 0 0.3rem;
+        left: calc(50% - 8px);
+        top: -8px;
+        &::before,
+        &::after {
+          position: absolute;
+          display: block;
+          content: "";
+          border-color: transparent;
+          border-style: solid;
+        }
+        &::before {
+          top: 0;
+          border-width: 0 0.5rem 0.5rem 0.5rem;
+          border-bottom-color: rgba(0, 0, 0, 0.25);
+        }
+        &::after {
+          top: 1px;
+          border-width: 0 0.5rem 0.5rem 0.5rem;
+          border-bottom-color: #fff;
+        }
+      }
+    }
+  }
+}
+
+.doc-content {
+}
+.content-container {
+  display: flex;
+  border-radius: 3px;
+  box-shadow: 0 3px 6px 0 rgba(32, 20, 4, 0.05);
+  background-color: #ffffff;
+
+  .documents {
+    padding: 15px;
+    overflow-y: auto;
+    max-height: 520px;
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      .actions {
+        color: #9ea0a5;
+      }
+    }
+    .documents-list {
+      width: 100%;
+      .document-content {
+        width: 100%;
+        .item-title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 15px;
+          &:hover {
+            cursor: pointer;
+            font-weight: 500;
+          }
+        }
+        .item-pages {
+          width: 100%;
+          .page-content {
+            width: 100%;
+            margin-bottom: 15px;
+            .pdf-content {
+              width: 100%;
+              height: 100%;
+              border-radius: 5px;
+              &:hover {
+                // box-shadow: 0 0 3px 0 #775649;
+                border: solid 2px #775649;
+                cursor: pointer;
+              }
+              canvas {
+                // height: 100% !important;
+              }
+            }
+            .selected-pdf {
+              border: solid 2px #775649;
+            }
+            .page-no {
+              margin-top: 15px;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+  }
+  .details-right {
+    width: 15px;
+    // height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #ebebeb;
+    background-color: #fcfafa;
+  }
+}
