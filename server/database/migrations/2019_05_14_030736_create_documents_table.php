@@ -15,18 +15,18 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('document_id', 20);
-            $table->string('document_name', 128);
-            $table->string('document_file', 128);
+            $table->string('document_id', 250);
+            $table->string('document_name', 250);
+            $table->string('document_file', 250);
             $table->bigInteger('creator_id')->unsigned();
             $table->bigInteger('doc_folder_id')->unsigned()->nullable();
             $table->integer('expiration_days')->unsigned()->nullable();
-            $table->string('action', 16)->nullable();
-            $table->string('status', 16);
+            $table->string('action', 250)->nullable();
+            $table->string('status', 250);
             $table->text('comment')->nullable();
             $table->bigInteger('first_request_id')->nullable();
             $table->string('password')->nullable();
-            $table->string('signed_file', 128)->nullable();
+            $table->string('signed_file', 250)->nullable();
             $table->timestamps();
 
             $table->foreign('creator_id')

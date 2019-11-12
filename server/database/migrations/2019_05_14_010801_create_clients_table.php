@@ -18,12 +18,12 @@ class CreateClientsTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('address', 128)->nullable();
             $table->string('address2', 128)->nullable();
-            $table->string('city', 64);
-            $table->string('zip_code', 16);
+            $table->string('city', 64)->nullable();
+            $table->string('zip_code', 16)->nullable();
             $table->string('phone_number', 16)->nullable();
-            $table->string('account_type', 16);
-            $table->bigInteger('country_id')->unsigned();
-            $table->bigInteger('state_id')->unsigned();
+            $table->string('account_type', 16)->nullable();
+            $table->bigInteger('country_id')->unsigned()->nullable();
+            $table->bigInteger('state_id')->unsigned()->nullable();
             $table->string('company_name', 128)->nullable();
             $table->bigInteger('company_size_id')->unsigned()->nullable();
             $table->bigInteger('industry_id')->unsigned()->nullable();

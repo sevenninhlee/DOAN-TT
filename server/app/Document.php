@@ -35,4 +35,16 @@ class Document extends Model
         'action' => 'required',
         'status' => 'required',
     );
+
+    public function recipients(){
+        return $this->belongsToMany('App\Recipient');
+    }
+
+    public function annotations(){
+        return $this->hasMany('App\Annotation','doc_id','id');
+    }
+
+    public function document_action(){
+        return $this->hasMany('App\DocumentAction','document_id','id');
+    }
 }

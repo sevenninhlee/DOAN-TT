@@ -35,4 +35,5 @@ class PDFController extends Controller
 
         return response(null, 200);
     }
+
 }

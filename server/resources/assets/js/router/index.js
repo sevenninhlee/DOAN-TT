@@ -8,20 +8,41 @@ import ForgotPassword from '../views/authentication/ForgotPassword'
 import ResetPassword from '../views/authentication/ResetPassword'
 import UploadDocument from '../views/documents/Upload'
 
-import Terms from '../views/cms/Terms'
-import Privacy from '../views/cms/Privacy'
-import Recipient from '../views/documents/Recipient'
-import Document from '../views/documents/Document'
-import DocumentVerify from '../views/documents/DocumentVerify'
-import Review from '../views/documents/Review'
 
+// Views - Documents
+const DocumentsContainer = () => import("../containers/DocumentsContainer");
+const AddDocuments = () => import("../views/document/AddDocuments");
+const AddRecipients = () => import("../views/document/AddRecipients");
+const Prepare = () => import("../views/document/Prepare");
+const Review = () => import("../views/document/Review");
 
+// Container and Views of Pricing and Payment
+const PaymentContainer = () => import("../containers/PaymentContainer");
+const NormalSign = () => import("../views/payment/NormalSigin");
+/////////////////////////////
+const TestCrop = () => import("../views/payment/NormalSigin_cp");
+/////////////////////////////
+const DocumentList = () => import("../views/payment/DocumentList");
+const UpgradeYourPlan = () => import("../views/payment/UpgradeYourPlan");
+const PricingPlan = () => import("../views/payment/PricingPlan");
+const UpgradeToPlan = () => import("../views/payment/UpgradeToPlan");
+const TemplateList = () => import("../views/payment/TemplateList");
+const Account = () => import("../views/profile/Account");
+const CustomBranding = () => import("../views/profile/CustomBranding");
+const Signature = () => import("../views/profile/Signature");
 
 Vue.use(Router)
 
 export default new Router({
     // mode: 'history',
+    history: true,
+    hashbang: false,
     routes: [
+        // {
+        //     path: '/crop-test',
+        //     name: 'TestCrop',
+        //     component: TestCrop
+        // },
         {
             path: '/signup',
             name: 'Signup',
@@ -67,36 +88,113 @@ export default new Router({
             name: 'Home',
             component: Home
         },
+
+
         {
-            path: '/terms',
-            name: 'Terms',
-            component: Terms
+          path: "/docu-sign",
+          redirect: "/docu-sign/add-document",
+          name: "Documents",
+          component: DocumentsContainer,
+          children: [
+            {
+              path: "add-document",
+              name: "AddDocument",
+              component: AddDocuments,
+              props: route => route
+            },
+            {
+              path: "add-recipients",
+              name: "AddRecipients",
+              component: AddRecipients
+            },
+            {
+              path: "prepare",
+              name: "Prepare",
+              component: Prepare
+            },
+            {
+              path: "review",
+              name: "Review",
+              component: Review
+            }
+          ]
         },
         {
-            path: '/privacy',
-            name: 'Privacy',
-            component: Privacy
+          path: "/profile",
+          redirect: "/profile/account",
+          name: "Profile",
+          component: PaymentContainer,
+          children: [
+            {
+              path: "account",
+              name: "Account",
+              component: Account
+            },
+            {
+              path: "custom-branding",
+              name: "CustomBranding",
+              component: CustomBranding
+            }
+          ]
         },
         {
-            path: '/recipient',
-            name: 'Recipient',
-            component: Recipient
+          path: "/signature",
+          redirect: "/signature/signature-stamp",
+          name: "Signature",
+          component: PaymentContainer,
+          children: [
+            {
+              path: "signature-stamp",
+              name: "SignatureStamp",
+              component: Signature
+            }
+          ]
         },
         {
-            path: '/document',
-            name: 'Document',
-            component: Document
+          path: "/",
+          redirect: "/landing",
+          name: "LandingPage",
+          component: PaymentContainer,
+          children: [
+            {
+              path: "/landing",
+              name: "NormalSign",
+              component: NormalSign
+            }
+          ]
         },
         {
-            path: '/documentverfiy',
-            name: 'DocumentVerify',
-            component: DocumentVerify
-        },
-        {
-            path: '/review',
-            name: 'Review',
-            component: Review
+          path: "/payment",
+          redirect: "/payment/document-list",
+          name: "Payment",
+          component: PaymentContainer,
+          children: [
+            {
+              path: "document-list",
+              name: "DocumentList",
+              component: DocumentList
+            },
+            {
+              path: "template-list",
+              name: "TemplateList",
+              component: TemplateList
+            },
+            {
+              path: "upgrade-plan",
+              name: "UpgradeYourPlan",
+              component: UpgradeYourPlan
+            },
+            {
+              path: "pricing-plan",
+              name: "PricingPlan",
+              component: PricingPlan
+            },
+            {
+              path: "upgrade-to-plan",
+              name: "UpgradeToPlan",
+              component: UpgradeToPlan
+            }
+          ]
         }
-        
     ]
 })

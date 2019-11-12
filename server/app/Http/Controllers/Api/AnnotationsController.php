@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Api\PDFsController;
+use Illuminate\Support\Facades\Storage;
+
 use App\Annotation;
+use App\Document;
 use Auth, Hash;
 
 class AnnotationsController extends Controller
@@ -18,6 +22,11 @@ class AnnotationsController extends Controller
         $res['data'] = $annotations;
 
         return $res;
+    }
+
+    public function getAnnotation(Request $request){
+        $annotation = Annotation::find($request->id)->first();
+        return $annotation;
     }
 
     public function deleteAnnotation($id)
@@ -431,6 +440,51 @@ class AnnotationsController extends Controller
         $annotation->save();
         
         return response(null, 200);
+    }
+
+    public function addAnnotation(Request $request){
+        $data = $request->all();
+        $data['creator_id'] = $request->user()->id;
+        $annotation = new Annotation();
+        if(isset($data['id'])){
+            $annotation = Annotation::find($data['id']);
+            if(isset($annotation)) {
+                unset($annotation['id']);
+                foreach ($data as $key => $value) {
+                    $annotation[$key] = $value;
+                }
+            } else {
+                return response([
+                    'status' => true,
+                ], 200);
+            }
+        }else {
+            foreach ($data as $key => $value) {
+                $annotation[$key] = $value;
+            }
+        }
+        $annotation->save();
+        return response([
+            'status' => true,
+            'annotation_id' => $annotation['id']
+        ], 200);
+    }
+
+    public function getAnnotationByDocumentId(Request $request){
+        $document_id = $request->document_id;
+        $list = Document::with('annotations')->where("document_id", $document_id)->get();
+        $annotations = [];
+        foreach ($list as $document) {  
+            foreach ($document['annotations'] as $key => $value) {
+                if($value['display'] === 'block') {
+                    array_push($annotations,$value);
+                }
+            }    
+        }
+        return response()->json([
+            'status' => true,
+            'annotations' => $annotations
+        ],200);
     }
 
 }

@@ -15,7 +15,7 @@ class Client extends Model
      * @var array
      */
 
-    protected $table = 'states';
+    protected $table = 'clients';
 
     protected $fillable = [
         'user_id', 'signature_type', 'text', 'font_face', 'uploaded_url'
@@ -29,4 +29,9 @@ class Client extends Model
         'signature_type' => 'required',
         'uploaded_url' => 'required',
     );
+
+    public function user() {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="app flex-row" ref="fileform">
     <div class="w-100 sign-stamp">
-      <h1>Signature and Stamp</h1>
+      <h1>{{ $t("signature.title") }}</h1>
       <hr class="mb-4" />
       <div class="row">
         <div class="col-md-6 pr-md-0">
@@ -10,14 +10,13 @@
               <div class="d-flex align-items-center">
                 <img src="img/icons/contract.svg" />
                 <div class="ml-3">
-                  <div class="header">Your signature & Initials</div>
+                  <div class="header">{{ $t("signature.header") }}</div>
                   <div
-                    class="comments"
-                  >Add cool signiture and initials from here.</div>
+                    class="comments">{{ $t("signature.comments") }}</div>
                 </div>
               </div>
               <b-button variant="primary" v-on:click="createSignature()">
-                Add Singiture/Initials
+                {{ $t("signature.signature") }}
               </b-button>
             </div>
           </div>
@@ -50,7 +49,7 @@
               <div class="d-flex align-items-center">
                 <img src="img/icons/stamp.svg" />
                 <div class="ml-3">
-                  <div class="header">Your stamp</div>
+                  <div class="header">{{ $t("signature.stamp") }}</div>
                   <div
                     class="comments"
                   >Add personnel / Corporate seal from here.</div>
@@ -424,11 +423,11 @@ export default {
   },
   
   created() {
-    window.addEventListener('resize', this.handleResize)
+    window.addEventListener('resize', this.handleResize, {passive: true})
     this.handleResize();
   },
   destroyed() {
-    window.removeEventListener('resize', this.handleResize)
+    window.removeEventListener('resize', this.handleResize, {passive: true})
   },
   methods: {
     handleResize() {

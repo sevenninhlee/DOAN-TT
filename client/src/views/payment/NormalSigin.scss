@@ -31,6 +31,7 @@
         position: relative;
         overflow: hidden;
         .change-avatar {
+          width: inherit;
           position: absolute;
           bottom: 0;
           text-align: center;
@@ -228,7 +229,11 @@
         .selected {
           border: solid 2px red;
         }
-
+      }
+      .cut {
+        width: 350px;
+        height: 350px;
+        margin: 30px auto;
       }
     }
   }

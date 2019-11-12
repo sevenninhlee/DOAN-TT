@@ -153,7 +153,7 @@
             <div class="content-card">
               <div class="doc-format"  v-bind:style="{borderColor: top_color}">
                 <div class="doc-header" v-bind:style="{borderColor: top_color}">
-                  <img src="img/logo_dark.svg" width="125" class="my-1"/>
+                  <img src="img/logo_dark.png" width="125" class="my-1"/>
                   <img src="img/icons/logo_axisbits_sm.svg" class="my-1"/>
                 </div>
                 <div class="doc-content">

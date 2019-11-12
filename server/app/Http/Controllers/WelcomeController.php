@@ -10,4 +10,7 @@ class WelcomeController extends Controller
     {
         return view('welcome');
     }
+    public function page403(Request $request){
+        return view('errors.403');
+    }
 }

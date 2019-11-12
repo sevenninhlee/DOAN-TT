@@ -81,7 +81,7 @@
           <div class="social-links">
             <facebook-login appId="2349951131937784" class="button btn-facebook" @login="onFBLogin" @logout="onFBLogout" @sdk-loaded="onFBSdkLoaded" :key="fbkey"></facebook-login>
             <GoogleLogin class="button btn-google" :params="googleLoginParams" :onSuccess="onGLoginSuccess" :onFailure="onGLoginFailure"></GoogleLogin>
-            <b-link href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1592490922&redirect_uri=https://www.coffeesign.io/api/auth/lineauth&state=asdfg135&scope=openid%20email"><img src="../../../images/line.png"/></b-link>
+            <b-link href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1592490922&redirect_uri=https://www.coffeesign.io/api/auth/lineauth&state=signup12&scope=openid%20email"><img src="../../../images/line.png"/></b-link>
             <KakaoLogin api-key="b2f99b39dd3b4d340a7c0ef10260c2e4" :on-success="onKakaoLoginSuccess" :on-failure="onKakaoLoginFailure" />
           </div>
         </div>
@@ -100,6 +100,7 @@ import GoogleLogin from 'vue-google-login'
 import KakaoLogin from 'vue-kakao-login'
 import axios from 'axios'
 
+// import '../../../scss/custom.scss';
 export default {
     name: "Login",
     components: {
@@ -175,9 +176,6 @@ export default {
 
             vm.login(vm.form)
                 .then(response => {
-                    vm.$session.start()
-                    vm.$session.set("user_email",vm.form.email);
-                    vm.$session.set("user_password",vm.form.password)
                     vm.$store.dispatch(AUTH_SUCCESS, response.data)
                     vm.toHome()
                 })
@@ -461,5 +459,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import "./authentication.scss";
 </style>

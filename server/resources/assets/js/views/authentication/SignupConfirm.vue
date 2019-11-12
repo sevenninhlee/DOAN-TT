@@ -52,6 +52,6 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-
+<style lang="scss" scoped>
+@import "./authentication.scss";
 </style>

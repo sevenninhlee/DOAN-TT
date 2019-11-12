@@ -1,17 +1,29 @@
 <template>
-  <canvas
-    id="canvas"
-    v-on:mousedown="handleMouseDown"
-    v-on:mouseup="handleMouseUp"
-    v-on:mousemove="handleMouseMove"
-    width="535"
-    height="280"
-  ></canvas>
+  <div class="canvas-border">
+    <canvas
+      :ref="canvas_id"
+      v-on:mousedown="handleMouseDown"
+      v-on:mouseout="handleMouseOut"
+      v-on:mouseup="handleMouseUp"
+      v-on:mousemove="handleMouseMove"
+      v-bind="stageSize"
+    ></canvas>
+  </div>
 </template>
+
 <script>
 export default {
+  props: {
+    paramData: Object,
+    drawSize: Object
+  },
   data: function() {
     return {
+      canvas_id: '',
+      stageSize: {
+        width: this.drawSize.width,
+        height: this.drawSize.height
+      },
       mouse: {
         current: {
           x: 0,
@@ -27,7 +39,7 @@ export default {
   },
   computed: {
     currentMouse: function() {
-      var c = document.getElementById("canvas");
+      var c = this.$refs[this.canvas_id];
       var rect = c.getBoundingClientRect();
 
       return {
@@ -36,15 +48,17 @@ export default {
       };
     }
   },
+  mounted() {
+    this.canvas_id = 'canvas-' + this.paramData.name
+  },
   methods: {
     draw: function(event) {
+      var c = this.$refs[this.canvas_id];
+      var ctx = c.getContext("2d");
       // requestAnimationFrame(this.draw);
+
       if (this.mouse.down) {
-        var c = document.getElementById("canvas");
-
-        var ctx = c.getContext("2d");
-
-        ctx.clearRect(0, 0, 800, 800);
+        ctx.clearRect(0, 0, this.drawSize.width, this.drawSize.height);
 
         ctx.lineTo(this.currentMouse.x, this.currentMouse.y);
         ctx.strokeStyle = "black";
@@ -53,16 +67,19 @@ export default {
       }
     },
     handleMouseDown: function(event) {
+      var c = this.$refs[this.canvas_id];
+      var ctx = c.getContext("2d");
+      
       this.mouse.down = true;
       this.mouse.current = {
         x: event.pageX,
         y: event.pageY
       };
-
-      var c = document.getElementById("canvas");
-      var ctx = c.getContext("2d");
-
+      
       ctx.moveTo(this.currentMouse.x, this.currentMouse.y);
+    },
+    handleMouseOut: function(event) {
+      this.mouse.down = false;
     },
     handleMouseUp: function() {
       this.mouse.down = false;
@@ -74,14 +91,27 @@ export default {
       };
 
       this.draw(event);
+    },
+    getDataURL: function () {
+      var c = this.$refs[this.canvas_id];
+      return c.toDataURL('image/svg+xml')
     }
   },
   ready: function() {
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
+    var c = this.$refs[this.canvas_id];
+    let ctx = c.getContext('2d', {antialias: false});
     ctx.translate(0.5, 0.5);
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.msImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
     // this.draw();
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.canvas-border{
+  border: solid 2px #ebebeb;
+}
+</style>

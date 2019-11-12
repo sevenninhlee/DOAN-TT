@@ -20,7 +20,7 @@ class AlterUsersTable extends Migration
             // $table->string('first_name', 45);
             // $table->string('last_name', 45);
             // $table->datetime('last_login_at')->nullable();
-            $table->boolean('admin')->default(false);
+            $table->boolean('admin')->default(false);//0:user, 1:admin, 2:masuser
             $table->boolean('active')->default(false);
             $table->string('activation_token')->nullable();
             // $table->integer('status')->default(0);

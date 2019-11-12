@@ -250,5 +250,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+@import "./authentication.scss";
 </style>

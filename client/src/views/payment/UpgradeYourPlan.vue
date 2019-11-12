@@ -68,6 +68,7 @@ export default {
     return {
       current_plan: 0,
       switch_annual: true,
+      plan_mode: "",
       plans: [
         {
           title: "Free",
@@ -109,9 +110,14 @@ export default {
       this.switch_annual = !this.switch_annual;
     },
     chooseThisPlan(toPlan, id) {
+      if (this.switch_annual==true) {
+         this.plan_mode = "annual";  
+      } else {
+        this.plan_mode = "monthly"
+      }
       this.$router.push({
         path: "/payment/upgrade-to-plan",
-        query: { plan: toPlan, id: id }
+        query: { plan: toPlan, id: id, planmode: this.plan_mode }
       });
     }
   }

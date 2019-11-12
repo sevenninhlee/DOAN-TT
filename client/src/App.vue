@@ -1,15 +1,21 @@
 <template>
-  <router-view></router-view>
+  <div id="app" class="root">
+    <router-view />
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+    }
+  }
 }
 </script>
 
 <style lang="scss">
-  // CoreUI Icons Set
+  /* CoreUI Icons Set */
   @import '~@coreui/icons/css/coreui-icons.min.css';
   /* Import Font Awesome Icons Set */
   $fa-font-path: '~font-awesome/fonts/';
@@ -21,8 +27,8 @@ export default {
   @import '~flag-icon-css/css/flag-icon.min.css';
   /* Import Bootstrap Vue Styles */
   @import '~bootstrap-vue/dist/bootstrap-vue.css';
-  // Import Main styles for this application
-  @import 'assets/scss/style';
+  /* Import Main styles for this application */
+  @import "./assets/scss/style.scss";
   @import "~@syncfusion/ej2-base/styles/material.css";
   @import "~@syncfusion/ej2-inputs/styles/material.css";
   @import "~@syncfusion/ej2-vue-dropdowns/styles/material.css";

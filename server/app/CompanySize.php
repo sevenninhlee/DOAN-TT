@@ -18,7 +18,7 @@ class CompanySize extends Model
     protected $table = 'company_sizes';
 
     protected $fillable = [
-        'company_size_name', 'size_from', 'size_to'
+        'company_size_name', 'size_from', 'size_to', 'size'
     ];
 
     protected $hidden = [

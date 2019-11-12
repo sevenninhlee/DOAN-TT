@@ -2,35 +2,33 @@
   <b-navbar-nav class="ml-auto">
     <AppHeaderDropdown right class="language-selector">
       <template slot="header">
-        <i class="flag-icon h5" :class="language" />
+        <i class="flag-icon h5 flag-custom" :class="`flag-icon-${$i18n.locale}`" />
       </template>
       <template slot="dropdown">
-        <b-dropdown-item v-on:click="language='flag-icon-gb'">
-          <i class="flag-icon flag-icon-gb" />
-        </b-dropdown-item>
-        <b-dropdown-item v-on:click="language='flag-icon-jp'">
-          <i class="flag-icon flag-icon-jp" />
-        </b-dropdown-item>
-        <b-dropdown-item v-on:click="language='flag-icon-kr'">
-          <i class="flag-icon flag-icon-kr" />
+        <b-dropdown-item
+          v-for="(language, index) in languages"
+          :key="index"
+          v-on:click="changeLanguage(language)">
+          <i class="flag-icon flag-custom2" v-bind:class="`flag-icon-${language}`" />
         </b-dropdown-item>
       </template>
     </AppHeaderDropdown>
     <b-nav-item>
-      <i class="fa fa-bell fa-lg"></i>
+      <font-awesome-icon :icon="['fa', 'bell']" size="lg"></font-awesome-icon>
       <b-badge pill variant="primary">2</b-badge>
     </b-nav-item>
     <AppHeaderDropdown right no-caret>
       <template slot="header">
-        <img src="img/avatars/NoPath.png" class="img-avatar" alt="admin@bootstrapmaster.com" />
-        <span class="hello">Hello, Suzzane!</span>
+        <!-- <img :src="getUser.avatar || 'img/avatars/default.png'" ref="avatarhead" :alt="getUser.email" class="img-avatar" @error="errorAvatar" /> -->
+        <img :src="getAvatar" ref="avatarhead" :alt="getUser.email" class="img-avatar" @error="errorAvatar" />
+        <span class="hello">{{ $t("layout.hello") }} {{getUser.first_name}}!</span>
       </template>
       <template slot="dropdown">
-        <b-dropdown-item v-on:click="gotoPage('/profile')">
-          <i class="fa fa-user" /> Profile
+        <b-dropdown-item v-on:click="gotoPage('Profile')">
+          <i class="fa fa-user" /> {{ $t("Profile") }}
         </b-dropdown-item>
-        <b-dropdown-item>
-          <i class="fa fa-sign-out" /> Logout
+        <b-dropdown-item @click="onLogout">
+          <i class="fa fa-sign-out" /> {{ $t("Logout") }}
         </b-dropdown-item>
       </template>
     </AppHeaderDropdown>
@@ -38,55 +36,92 @@
 </template>
 
 <script>
-import { HeaderDropdown as AppHeaderDropdown } from "@coreui/vue";
+import { HeaderDropdown as AppHeaderDropdown } from "@coreui/vue"
+import { mapGetters, mapState } from 'vuex'
+import { GET_USER_INFOR_REQUEST, CHANGE_LANGUAGE_ACTION } from "../store/actions.type"
+import { LANGUAGES } from "../i18n"
+import { authentication } from '../mixins/authentication'
 export default {
   name: "DefaultHeaderDropdownAccnt",
   components: {
     AppHeaderDropdown
   },
+  mixins: [authentication],
   data: () => {
     return {
       itemsCount: 42,
-      language: "flag-icon-gb"
+      languages: LANGUAGES
     };
   },
+  computed: {
+    ...mapGetters(['getUser']),
+    getAvatar() {
+      return this.getUser.avatar || './img/avatars/default.png'
+    }
+  },
+  created(){
+    this.$store.dispatch(GET_USER_INFOR_REQUEST)
+      .then(response => {})
+      .catch(error => {})
+  },
   methods: {
-    gotoPage(url) {
-      this.$router.push({ path: url });
+    errorAvatar() {
+      this.$refs['avatarhead'].src = './img/avatars/default.png'
+    },
+    gotoPage(name) {
+      this.$router.push({ name: name })
+    },
+    onLogout: function() {
+      this.logout()
+    },
+    changeLanguage(lang) {
+      this.$store.dispatch(CHANGE_LANGUAGE_ACTION, {
+        lang: lang,
+        i18n: this.$root.$i18n
+      })
     }
   }
 };
 </script>
 <style lang="scss">
-.language-selector {
-  .dropdown-menu {
-    min-width: 50px;
-    width: 50px;
-    .dropdown-item {
-      min-width: 48px !important;
+  .language-selector {
+    .dropdown-menu {
+      min-width: 50px;
+      width: 65px;
+      .dropdown-item {
+        min-width: 48px !important;
+      }
+    }
+    .flag-custom {
+      margin: 0;
+      // margin-right: 10px;
+      border: 1px solid #ccc;
+      width: 30px;
+    }
+    .flag-custom2 {
+      margin-left: -1px;
+      border: 1px solid #ccc;
+      width: 25px;
+      height: 20px;
     }
   }
-}
-.hello {
-  @media (max-width: 1280px) {
-    display: none;
+  .hello {
+    @media (max-width: 1280px) {
+      display: none;
+    }
   }
-}
-@media (max-width: 1095px) {
-  .img-avatar {
-    margin: 0 0 !important;
-  }
-  .navbar-nav {
-    .nav-item {
-      min-width: 35px;
-      .nav-link {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        .badge {
-          // left: 15% !important;
+  @media (max-width: 1095px) {
+    .img-avatar {
+      margin: 0 0 !important;
+    }
+    .navbar-nav {
+      .nav-item {
+        min-width: 35px;
+        .nav-link {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
         }
       }
     }
   }
-}
 </style>

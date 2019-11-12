@@ -15,7 +15,7 @@ class Industries extends Model
      * @var array
      */
 
-    protected $table = 'industry';
+    protected $table = 'industries';
 
     protected $fillable = [
         'industry_name'

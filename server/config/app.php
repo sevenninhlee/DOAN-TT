@@ -166,6 +166,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Ixudra\Curl\CurlServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -178,6 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
@@ -233,6 +235,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'Curl' => Ixudra\Curl\Facades\Curl::class,
 
     ],
 

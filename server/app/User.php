@@ -27,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'activation_token'
+         'remember_token', 'activation_token'
     ];
 
     /**
@@ -40,4 +40,8 @@ class User extends Authenticatable
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function client(){
+        return $this->hasOne('App\Client', 'user_id', 'id');
+    }
 }

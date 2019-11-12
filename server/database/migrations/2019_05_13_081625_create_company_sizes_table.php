@@ -15,7 +15,7 @@ class CreateCompanySizesTable extends Migration
     {
         Schema::create('company_sizes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('company_size_name', 64);
+            $table->string('company_size_name', 250);
             $table->integer('size_from');
             $table->integer('size_to');
             $table->timestamps();

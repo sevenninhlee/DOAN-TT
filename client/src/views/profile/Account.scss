@@ -18,6 +18,37 @@
         line-height: 1.31;
         color: #2e221e;
       }
+      .avatar-tag {
+        width: 120px;
+        height: 120px;
+        min-width: 120px;
+        border-radius: 50%;
+        background: #8a6454;
+        color: white;
+        font-size: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        .avatar-profile {
+          min-width: 120px; 
+          width: 100%; 
+          height: auto
+        }
+        .change-avatar {
+          position: absolute;
+          bottom: 0;
+          text-align: center;
+          font-size: 0.8rem;
+          height: 1.5rem;
+          background: rgba(0,0,0,.54);
+          width: 100%;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
     }
     .user-connection {
       text-align: left;
@@ -147,4 +178,29 @@
       }
     }
   }
+}
+
+.form-group-withicon {
+  .form-control {
+    padding-left: 3.2rem;
+  }
+  svg {
+    color: #9EA0A5;
+    position: absolute;
+    margin-top: -2.25rem;
+    margin-left: 1.2rem;
+  }
+  div.eye {
+    position: absolute;
+    // margin-top: -2.25rem;
+    right: 2.25rem;
+    svg {
+      position: relative !important;
+      margin-left: 0;
+    }
+  }
+}
+
+.form-group-withicon .password {
+  padding-right: 3.2rem;
 }

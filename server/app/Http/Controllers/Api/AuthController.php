@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
+// use GuzzleHttp\Client;
 use JWTAuth;
 
 use App\User;
+use App\Client;
 
 use Config;
 
@@ -33,6 +35,8 @@ class AuthController extends Controller
         } else {
 
             $validator = Validator::make($request->all(), [
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
                 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string|confirmed'
             ]);
@@ -45,6 +49,9 @@ class AuthController extends Controller
         }
 
         $user = new User([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'name' => $request->first_name . ' ' . $request->last_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'activation_token' => str_random(60),
@@ -150,17 +157,14 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
 
-
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors()->all()
             ], 422);
         }
-         
+
         $user = User::where('email', $request->email)->first();
-
         if ($request->provider_name) {
-
             if (!$user) {
                 return response()->json([
                     'errors' => [],
@@ -175,7 +179,6 @@ class AuthController extends Controller
                 ], 401);
             }
         }
-
         if (!$user && $request->provider_name) {
             return response()->json([
                 'errors' => [],
@@ -195,8 +198,6 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         $credentials['active'] = 1;
         $credentials['deleted_at'] = null;
-
-        
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
@@ -224,11 +225,20 @@ class AuthController extends Controller
 
     public function lineAuth(Request $request)
     {
+        $app_url = urlencode(env('APP_URL', 'http://localhost:8000'));
+        $client_url = env('CLIENT_URL', 'https://localhost:8080');
+
+        $line_client_id = env('LINE_CLIENT_ID', '');
+        $line_client_secret = env('LINE_CLIENT_SECRET', '');
+        $line_scope = str_slug(env('LINE_SCOPE', ''), '%20');
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, 'https://api.line.me/oauth2/v2.1/token');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=". $request->code. "&redirect_uri=https%3A%2F%2Fwww.coffeesign.io%2Fapi%2Fauth%2Flineauth&client_id=1592490922&client_secret=ac2187f25740bc3643393cec8c4a3be9");
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=". $request->code. "&redirect_uri=".$app_url."%2Fapi%2Fauth%2Flineauth&client_id=".$line_client_id."&client_secret=".$line_client_secret."&scope=".$line_scope."&nonce=09876xyz");
+
         curl_setopt($ch, CURLOPT_POST, 1);
 
         $headers = array();
@@ -246,11 +256,59 @@ class AuthController extends Controller
         $c = substr($b, 0, strpos($b, "}") + 1);
         $d = json_decode($c);
 
-        if ($request->state == 'signup12') {
-            return redirect()->away('https://www.coffeesign.io/#/signup/'.$d->email);
-        } else {
-            return redirect()->away('https://www.coffeesign.io/#/login/'.$d->email);
+        $user = User::where('email', $d->email)->first();
+        if($user) {     
+          return redirect()->away($client_url.'/login/'.$d->email);
         }
+
+        if (preg_match('/\s/',$d->name)) {
+          $name = preg_split ('/\s/', $d->name);
+          $first_name = $name[0];
+          $last_name = $name[1];
+        }
+        else {
+          $first_name = $d->name;
+          $last_name = ' ';
+        }
+
+        $profile = new \Illuminate\Http\Request();
+        $profile->setMethod('POST');
+        $profile->request->add([
+          'email' => $d->email,
+          'password' => 'lCSpwd2@',
+          'password_confirmation' => 'lCSpwd2@',
+          'first_name' => $first_name,
+          'last_name' => $last_name,
+          'name' => $d->name
+        ]);
+
+        $validator = Validator::make($profile->all(), [
+          'first_name' => 'required|string',
+          'last_name' => 'required|string',
+          'email' => 'required|string|email|unique:users',
+          'password' => 'required|string|confirmed'
+        ]);
+
+        if ($validator->fails()) {
+          return redirect()->away($client_url.'/login/errors/'.$validator->errors());
+          // return redirect()->away('https://localhost:8080/#/login/errors/'.$validator->errors());
+        }
+
+        $user = new User([
+          'first_name' => $profile->first_name,
+          'last_name' => $profile->last_name,
+          'name' => $profile->name,
+          'email' => $profile->email,
+          'password' => bcrypt($profile->password),
+          'activation_token' => str_random(60),
+          'provider_name' => 'line'
+        ]);
+
+        $user['active'] = true;
+        $user->save();
+          
+        return redirect()->away($client_url.'/login/'.$profile->email);
+        // return redirect()->away('https://localhost:8080/#/login/'.$profile->email);
     }
 
     public function kakaoProfile(Request $request)
@@ -265,7 +323,8 @@ class AuthController extends Controller
         $headers[] = 'Content-Type: application/x-www-form-urlencoded';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "propertyKeys=%5B%E2%80%9Ckakao_account.email%E2%80%9D%5D");
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, "propertyKeys=%5B%E2%80%9Ckakao_account.email%E2%80%9D%5D");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "propertyKeys=%5B%22kakao_account.email%22%2C%20%22name%22%2C%20%22first_name%22%2C%20%22last_name%22%5D");
         curl_setopt($ch, CURLOPT_POST, 1);
 
         $result = curl_exec($ch);
@@ -275,5 +334,27 @@ class AuthController extends Controller
         curl_close($ch);
 
         return $result;
+    }
+
+    public function user(Request $request){ 
+        $user = User::with(['client' => function($query) {
+          $query->leftJoin('company_sizes', 'clients.company_size_id', 'company_sizes.id')
+                ->leftJoin('departments', 'clients.department_id', 'departments.id')
+                ->leftJoin('industries', 'clients.industry_id', 'industries.id');
+        }])->find($request->user()->id);
+        if(!is_null($user)) {
+          // $user->avatar = $user->avatar ? asset(Storage::url($user->avatar)) : $user->avatar;
+          $url = env('APP_URL', 'http://localhost:8000') . "/images/" . $user->avatar;
+          $user->avatar = $url;
+          return response()->json([
+            'status' => true,
+            'user' => $user
+          ],200);
+        }
+        else {
+          return response()->json([
+            'status' => false
+          ],404);
+        }
     }
 }

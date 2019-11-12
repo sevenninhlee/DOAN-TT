@@ -98,7 +98,7 @@
               </b-form-group>
               <input type="submit" class="btn btn-block btn-md btn-coffee" value="Sing Up and Get Started"/>
             </b-form>
-            <span class="text-gray" style="display: block; margin-top: 20px;">By proceeding your agree to the <a href="javascript:;" class="text-coffee-light link"  @click="toTerms();" >Terms of Use</a> and <a href="javascript:;" class="text-coffee-light link" @click="toPolicy();">Privacy Policy</a></span>
+            <span class="text-gray" style="display: block; margin-top: 20px;">By proceeding your agree to the <a href="javascript:;" class="text-coffee-light link">Terms of Use</a> and <a href="javascript:;" class="text-coffee-light link">Privacy Policy</a></span>
             <div class="signup-withsocial">
               <p class="text-gray">Or you can signup with:</p>
               <div class="social-links">
@@ -504,12 +504,6 @@ export default {
         toLogin() {
             this.$router.push({ name: 'Login' })
         },
-        toTerms() {
-            this.$router.push({ name: 'Terms' })
-        },
-        toPolicy() {
-            this.$router.push({ name: 'Privacy' })
-        },
         toHome() {
             this.$router.push({ name: 'Home' })
         },
@@ -524,6 +518,6 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
-
+<style lang="scss" scoped>
+@import "./authentication.scss";
 </style>
