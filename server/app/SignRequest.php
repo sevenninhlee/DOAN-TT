@@ -9,12 +9,6 @@ class SignRequest extends Model
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-
     protected $table = 'sign_requests';
 
     protected $fillable = [

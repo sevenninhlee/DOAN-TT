@@ -55,8 +55,10 @@ Route::prefix('document')->middleware('auth:api')->group(function() {
     Route::post('/add-rotate-page','Api\DocumentsController@addRotatePage');
 });
 
+
 // Route::put('/drequest/{doc_id}', 'Api\DocumentsController@editSignRequest')->middleware('auth:api');
 // Route::delete('/drequest/{doc_id}', 'Api\DocumentsController@deleteSignRequest')->middleware('auth:api');
+
 
 Route::prefix('annotation')->group(function() {
     Route::get('/', 'Api\AnnotationsController@index');
