@@ -406,6 +406,7 @@ class DocumentsController extends Controller
                 $images = [];
                 $objPDF = new PDFsController();
                 $images = $objPDF->createObjImage($document->document_file, $document->document_id);
+                // echo "Start <br/>"; echo '<pre>'; print_r($images);echo '</pre>';exit("End Data");
                 $document['images'] = $images;
             }
             $doc_url = Storage::url($document->document_file); 
