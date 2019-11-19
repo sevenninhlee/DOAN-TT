@@ -21,16 +21,16 @@
           >{{ $t("home.drag.subtitle") }}</div>
         </div>
         <div class="store-src" v-bind:class="{'none-top-margin':checkHasFiles()}">
-          <Dropbox @addFiles="addFiles" />
           <GoogleDrive @addFiles="addFiles" />
-          <OneDrive @addFiles="addFiles" />
-          <Box @addFiles="addFiles" />
+          <Dropbox @addFiles="addFiles" />
+          <!-- <OneDrive @addFiles="addFiles" /> -->
+          <!-- <Box @addFiles="addFiles" /> -->
           <!-- <UserIcon icon="dropbox.svg" class="store-src-item" /> -->
           <!-- <UserIcon icon="google-drive.svg" class="store-src-item" /> -->
           <!-- <UserIcon icon="onedrive.svg" class="store-src-item" /> -->
           <!-- <UserIcon icon="box.svg" class="store-src-item" /> -->
         </div>
-        <div
+        <!-- <div
           class="you-can-use"
           v-bind:class="{'you-can-use-has-file':checkHasFiles()}"
         >{{ $t("home.drag.comments") }}</div>
@@ -38,7 +38,7 @@
           variant="outline-primary"
           style="min-width:153px;margin-top: 10px;"
           :class="{'none-top-margin':files.length > 0}"
-        >{{ $t("home.drag.button") }}</b-button>
+        >{{ $t("home.drag.button") }}</b-button> -->
       </form>
     </div>
     <div class="file-list">
