@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     async chooserFile() {
-      // console.log("Clicked");
       await gapi.load("auth2", () => {
         // console.log("Auth2 Loaded");
         gapi.auth2.authorize(
@@ -75,12 +74,11 @@ export default {
             data.docs &&
             data.docs.length > 0 &&
             data.docs.map(v => {
-              // return convertUrlToFile(v, 'embedUrl');
               return {
                 ...v,
                 type: extensionToMimeType(`${v.name.split(".")[1]}`),
                 size: v.sizeBytes,
-                downloadUrl: `https://drive.google.com/uc?id=${v.id}&export=download`,
+                downloadUrl: `https://drive.google.com/uc?id=${v.id}&export=download`
               };
             });
           this.$emit("addFiles", attachments, true);
