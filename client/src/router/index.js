@@ -24,7 +24,7 @@ const PaymentContainer = () => import("../containers/PaymentContainer");
 const NormalSign = () => import("../views/payment/NormalSigin");
 
 /** Import Signature & Stamp */
-const SignatureStamp = () => import("../views/signaturestamp/SignatureStamp")
+// const SignatureStamp = () => import("../views/signaturestamp/SignatureStamp")
 const SignInitialStamps = () => import("../views/signaturestamp/SignInitialStamps")
 
 const DocumentList = () => import("../views/payment/DocumentList");
@@ -34,10 +34,10 @@ const UpgradeToPlan = () => import("../views/payment/UpgradeToPlan");
 const TemplateList = () => import("../views/payment/TemplateList");
 const Account = () => import("../views/profile/Account");
 const CustomBranding = () => import("../views/profile/CustomBranding");
-const Signature = () => import("../views/profile/Signature");
+// const Signature = () => import("../views/profile/Signature");
 
 /////////////////////////////////////////////////////////////////
-const TestCrop = () => import("../views/payment/NormalSigin_cp");
+// const TestCrop = () => import("../views/payment/NormalSigin_cp");
 /////////////////////////////////////////////////////////////////
 
 Vue.use(Router)

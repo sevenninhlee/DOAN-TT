@@ -11,7 +11,7 @@
 
           </div>
           <div class="ml-3">
-            <h1 class="happy">{{ $t("home.title") }}<div>{{ $t("home.subtitle") }}</div></h1>
+            <h2 class="happy">{{ $t("home.title") }}<div>{{ this.user_name }}!</div></h2>
             <span class="comments">{{ $t("home.comments") }}</span>
           </div>
         </div>
@@ -221,6 +221,7 @@ export default {
       model: false,
       modelSrc: '',
       crap: false,
+      user_name: "",
       previews: {},
       lists: [
         {
@@ -255,7 +256,10 @@ export default {
     .then( res => {
       res 
         && res.user 
-          && res.user.avatar ? this.option.img = res.user.avatar : this.option.img;
+          && res.user.avatar ? this.option.img = res.user.avatar : this.option.img; 
+      res 
+        && res.user 
+          && res.user.last_name && res.user.first_name ? this.user_name = `${res.user.first_name} ${res.user.last_name}`  : "Ninh";
     })
     .catch( err => {
 

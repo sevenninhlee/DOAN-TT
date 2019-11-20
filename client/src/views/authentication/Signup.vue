@@ -369,7 +369,7 @@ export default {
             vm.signup(vm.form)
                 .then(response => {
                     vm.onSuccess()
-
+                    vm.clearSForm();
                     vm.pageLoading = false
                 })
                 .catch(error => {
