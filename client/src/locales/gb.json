@@ -317,7 +317,7 @@
       "subtitle": "Email Subject",
       "email": "Email Message",
       "input_email_sub_1":"Sign Request for", 
-      "input_email_sub_2":"from Coffeesign.io",
+      "input_email_sub_2":"from Coffeesign",
       "input_message_1":"As discussed, please kindly take a look at the document and sign.",
       "input_message_2":"Thanks.",
       "placeholder": {

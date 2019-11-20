@@ -220,7 +220,7 @@
 			<div class="doc-format" style="border-color: rgb(46, 57, 73);">
 				<div class="doc-header" style="border-color: rgb(46, 57, 73);">
 					<div style="width:100%; display:inline-block; text-align: center">
-						<img src="https://ibb.co/jWMj1vZ" alt="img" width="125" class="my-1">
+						<img src="https://i.ibb.co/9VTdC93/logo-dark.jpg" alt="img" width="125" class="my-1">
 					</div>
 					<div style="display: none">
 						<div style="width:50%; float:left; display:inline-block">

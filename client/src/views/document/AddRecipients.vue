@@ -39,17 +39,15 @@
                   <b-button
                     :variant="recipient.com_type?'primary':'outline-primary'"
                     class="w-50"
-                    :pressed.sync="recipient.com_type"
                   >{{ $t("docsign.recipients.button.email") }}</b-button>
+                  <!-- :pressed.sync="recipient.com_type" -->
                   <b-button
                     :variant="!recipient.com_type?'primary':'outline-primary'"
                     class="w-50"
-                    :pressed.sync="recipient.com_type"
                   >
-                    <!-- @click="loginWithKakao(recipient.com_type, index)" -->
                     {{ $t("docsign.recipients.button.talk") }}
-                    <!-- <KakaoLogin api-key="6c4e91afbb15437d319ac9c9d38f1ac5" :on-success="onKakaoLoginSuccess" :on-failure="onKakaoLoginFailure" /> -->
                   </b-button>
+                    <!-- :pressed.sync="recipient.com_type" -->
                 </b-form-group>
               </div>
             </div>

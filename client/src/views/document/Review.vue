@@ -39,7 +39,7 @@
           <div class="d-flex align-items-center mt-3">
             <span>
               {{ $t("docsign.review.request.scheduled") }}
-              <strong>{{$t('May 1, 2019')}}</strong> {{ $t("docsign.review.request.at") }}
+              <strong>{{$t('May 1, 2020')}}</strong> {{ $t("docsign.review.request.at") }}
               <strong>{{$t('6:59:59 AM')}}</strong>
             </span>
           </div>
@@ -160,7 +160,7 @@ export default {
     .then( res => {
       this.review_form.name = this.converDocuments().join(', ')
       this.review_form.recipients = this.getRecipients;
-      this.review_form.subject = 'Sign Request for '+this.review_form.name+' from Coffeesign.io'
+      this.review_form.subject = 'Sign Request for '+this.review_form.name+' from Coffeesign.'
     })
     .catch( err => {
 
