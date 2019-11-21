@@ -27,9 +27,9 @@ class AuthController extends Controller
         if ($request->provider_name) {
             $user = User::where('email', $request->email)->first();
             if ($user) {
-                $provider = $user->provider_name!=null ? $user->provider_name : "Email";
+                $provider = $user->provider_name != null ? $user->provider_name : "Email";
                 return response()->json([
-                    'errors' => ["email" => ["Your Email address has been already registered as ". $provider . " account"]]
+                    'errors' => ["email" => ["Your Email address has been already registered as " . $provider . " account"]]
                 ], 422);
             }
         } else {
@@ -101,7 +101,7 @@ class AuthController extends Controller
                 'email' => 'required|string|email|unique:users',
                 'password' => 'required|string|confirmed'
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'errors' => $validator->errors()->all()
@@ -114,7 +114,7 @@ class AuthController extends Controller
                 'activation_token' => str_random(60),
                 'provider_name' => $request->provider_name
             ]);
-    
+
             $user->save();
         }
 
@@ -175,7 +175,7 @@ class AuthController extends Controller
                     $provider = "email";
                 }
                 return response()->json([
-                    'errors' => ['email' => ["This email address is already registered with ". $provider. ' account']]
+                    'errors' => ['email' => ["This email address is already registered with " . $provider . ' account']]
                 ], 401);
             }
         }
@@ -237,7 +237,7 @@ class AuthController extends Controller
         curl_setopt($ch, CURLOPT_URL, 'https://api.line.me/oauth2/v2.1/token');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=". $request->code. "&redirect_uri=".$app_url."%2Fapi%2Fauth%2Flineauth&client_id=".$line_client_id."&client_secret=".$line_client_secret."&scope=".$line_scope."&nonce=09876xyz");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=" . $request->code . "&redirect_uri=" . $app_url . "%2Fapi%2Fauth%2Flineauth&client_id=" . $line_client_id . "&client_secret=" . $line_client_secret . "&scope=" . $line_scope . "&nonce=09876xyz");
 
         curl_setopt($ch, CURLOPT_POST, 1);
 
@@ -257,57 +257,56 @@ class AuthController extends Controller
         $d = json_decode($c);
 
         $user = User::where('email', $d->email)->first();
-        if($user) {     
-          return redirect()->away($client_url.'/login/'.$d->email);
+        if ($user) {
+            return redirect()->away($client_url . '/login/' . $d->email);
         }
 
-        if (preg_match('/\s/',$d->name)) {
-          $name = preg_split ('/\s/', $d->name);
-          $first_name = $name[0];
-          $last_name = $name[1];
-        }
-        else {
-          $first_name = $d->name;
-          $last_name = ' ';
+        if (preg_match('/\s/', $d->name)) {
+            $name = preg_split('/\s/', $d->name);
+            $first_name = $name[0];
+            $last_name = $name[1];
+        } else {
+            $first_name = $d->name;
+            $last_name = ' ';
         }
 
         $profile = new \Illuminate\Http\Request();
         $profile->setMethod('POST');
         $profile->request->add([
-          'email' => $d->email,
-          'password' => 'lCSpwd2@',
-          'password_confirmation' => 'lCSpwd2@',
-          'first_name' => $first_name,
-          'last_name' => $last_name,
-          'name' => $d->name
+            'email' => $d->email,
+            'password' => 'lCSpwd2@',
+            'password_confirmation' => 'lCSpwd2@',
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'name' => $d->name
         ]);
 
         $validator = Validator::make($profile->all(), [
-          'first_name' => 'required|string',
-          'last_name' => 'required|string',
-          'email' => 'required|string|email|unique:users',
-          'password' => 'required|string|confirmed'
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|confirmed'
         ]);
 
         if ($validator->fails()) {
-          return redirect()->away($client_url.'/login/errors/'.$validator->errors());
-          // return redirect()->away('https://localhost:8080/#/login/errors/'.$validator->errors());
+            return redirect()->away($client_url . '/login/errors/' . $validator->errors());
+            // return redirect()->away('https://localhost:8080/#/login/errors/'.$validator->errors());
         }
 
         $user = new User([
-          'first_name' => $profile->first_name,
-          'last_name' => $profile->last_name,
-          'name' => $profile->name,
-          'email' => $profile->email,
-          'password' => bcrypt($profile->password),
-          'activation_token' => str_random(60),
-          'provider_name' => 'line'
+            'first_name' => $profile->first_name,
+            'last_name' => $profile->last_name,
+            'name' => $profile->name,
+            'email' => $profile->email,
+            'password' => bcrypt($profile->password),
+            'activation_token' => str_random(60),
+            'provider_name' => 'line'
         ]);
 
         $user['active'] = true;
         $user->save();
-          
-        return redirect()->away($client_url.'/login/'.$profile->email);
+
+        return redirect()->away($client_url . '/login/' . $profile->email);
         // return redirect()->away('https://localhost:8080/#/login/'.$profile->email);
     }
 
@@ -319,7 +318,7 @@ class AuthController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $headers = array();
-        $headers[] = 'Authorization: Bearer '. $request->access_token;
+        $headers[] = 'Authorization: Bearer ' . $request->access_token;
         $headers[] = 'Content-Type: application/x-www-form-urlencoded';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -336,25 +335,25 @@ class AuthController extends Controller
         return $result;
     }
 
-    public function user(Request $request){ 
-        $user = User::with(['client' => function($query) {
-          $query->leftJoin('company_sizes', 'clients.company_size_id', 'company_sizes.id')
+    public function user(Request $request)
+    {
+        $user = User::with(['client' => function ($query) {
+            $query->leftJoin('company_sizes', 'clients.company_size_id', 'company_sizes.id')
                 ->leftJoin('departments', 'clients.department_id', 'departments.id')
                 ->leftJoin('industries', 'clients.industry_id', 'industries.id');
         }])->find($request->user()->id);
-        if(!is_null($user)) {
-          // $user->avatar = $user->avatar ? asset(Storage::url($user->avatar)) : $user->avatar;
-          $url = env('APP_URL', 'http://localhost:8000') . "/images/" . $user->avatar;
-          $user->avatar = $url;
-          return response()->json([
-            'status' => true,
-            'user' => $user
-          ],200);
-        }
-        else {
-          return response()->json([
-            'status' => false
-          ],404);
+        if (!is_null($user)) {
+            // $user->avatar = $user->avatar ? asset(Storage::url($user->avatar)) : $user->avatar;
+            $url = env('APP_URL', 'http://localhost:8000') . "/images/" . $user->avatar;
+            $user->avatar = $url;
+            return response()->json([
+                'status' => true,
+                'user' => $user
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false
+            ], 404);
         }
     }
 }

@@ -24,7 +24,8 @@ class AnnotationsController extends Controller
         return $res;
     }
 
-    public function getAnnotation(Request $request){
+    public function getAnnotation(Request $request)
+    {
         $annotation = Annotation::find($request->id)->first();
         return $annotation;
     }
@@ -91,7 +92,7 @@ class AnnotationsController extends Controller
         $annotation->font_color     = $in['font_color'];
 
         $annotation->save();
-        
+
         return response(null, 201);
     }
 
@@ -151,7 +152,7 @@ class AnnotationsController extends Controller
         $annotation->font_color     = $in['font_color'];
 
         $annotation->save();
-        
+
         return response(null, 200);
     }
 
@@ -197,7 +198,7 @@ class AnnotationsController extends Controller
         $annotation->image_url      = 'image-annotation001.png';
 
         $annotation->save();
-        
+
         return response(null, 201);
     }
 
@@ -230,7 +231,7 @@ class AnnotationsController extends Controller
             return response(null, 404);
         }
 
-        
+
         if ($annotation['type'] != 'image') {
             return response(['errors' => ['Invalid annotation type']], 422);
         }
@@ -250,7 +251,7 @@ class AnnotationsController extends Controller
         $annotation->image_url      = $in['image_url'];
 
         $annotation->save();
-        
+
         return response(null, 200);
     }
 
@@ -290,7 +291,7 @@ class AnnotationsController extends Controller
         $annotation->alpha          = $in['alpha'];
 
         $annotation->save();
-        
+
         return response(null, 201);
     }
 
@@ -323,7 +324,7 @@ class AnnotationsController extends Controller
             return response(null, 404);
         }
 
-        
+
         if ($annotation['type'] != 'checkbox') {
             return response(['errors' => ['Invalid annotation type']], 422);
         }
@@ -342,7 +343,7 @@ class AnnotationsController extends Controller
         $annotation->alpha          = $in['alpha'];
 
         $annotation->save();
-        
+
         return response(null, 200);
     }
 
@@ -384,7 +385,7 @@ class AnnotationsController extends Controller
         $annotation->alpha          = $in['alpha'];
 
         $annotation->save();
-        
+
         return response(null, 201);
     }
 
@@ -418,7 +419,7 @@ class AnnotationsController extends Controller
             return response(null, 404);
         }
 
-        
+
         if ($annotation['type'] != 'radiobutton') {
             return response(['errors' => ['Invalid annotation type']], 422);
         }
@@ -438,17 +439,18 @@ class AnnotationsController extends Controller
         $annotation->alpha          = $in['alpha'];
 
         $annotation->save();
-        
+
         return response(null, 200);
     }
 
-    public function addAnnotation(Request $request){
+    public function addAnnotation(Request $request)
+    {
         $data = $request->all();
         $data['creator_id'] = $request->user()->id;
         $annotation = new Annotation();
-        if(isset($data['id'])){
+        if (isset($data['id'])) {
             $annotation = Annotation::find($data['id']);
-            if(isset($annotation)) {
+            if (isset($annotation)) {
                 unset($annotation['id']);
                 foreach ($data as $key => $value) {
                     $annotation[$key] = $value;
@@ -458,7 +460,7 @@ class AnnotationsController extends Controller
                     'status' => true,
                 ], 200);
             }
-        }else {
+        } else {
             foreach ($data as $key => $value) {
                 $annotation[$key] = $value;
             }
@@ -470,21 +472,21 @@ class AnnotationsController extends Controller
         ], 200);
     }
 
-    public function getAnnotationByDocumentId(Request $request){
+    public function getAnnotationByDocumentId(Request $request)
+    {
         $document_id = $request->document_id;
         $list = Document::with('annotations')->where("document_id", $document_id)->get();
         $annotations = [];
-        foreach ($list as $document) {  
+        foreach ($list as $document) {
             foreach ($document['annotations'] as $key => $value) {
-                if($value['display'] === 'block') {
-                    array_push($annotations,$value);
+                if ($value['display'] === 'block') {
+                    array_push($annotations, $value);
                 }
-            }    
+            }
         }
         return response()->json([
             'status' => true,
             'annotations' => $annotations
-        ],200);
+        ], 200);
     }
-
 }
