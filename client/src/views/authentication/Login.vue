@@ -92,10 +92,10 @@
               :onSuccess="onGLoginSuccess" 
               :onFailure="onGLoginFailure">
             </GoogleLogin>
-            <b-link :href="`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${lineLoginParams.client_id}&redirect_uri=${server_url}/api/auth/lineauth&state=login12&scope=${this.stringToURL(lineLoginParams.scope)}`">
+            <!-- <b-link :href="`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${lineLoginParams.client_id}&redirect_uri=${server_url}/api/auth/lineauth&state=login12&scope=${this.stringToURL(lineLoginParams.scope)}`">
               <img src="/img/social/line.png"/>
             </b-link>
-            <KakaoLogin :api-key="kakaoLoginParams.api_key" :on-success="onKakaoLoginSuccess" :on-failure="onKakaoLoginFailure" />
+            <KakaoLogin :api-key="kakaoLoginParams.api_key" :on-success="onKakaoLoginSuccess" :on-failure="onKakaoLoginFailure" /> -->
           </div>
 
           <!-- <div class="social-links">

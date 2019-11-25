@@ -168,8 +168,8 @@
                   :onSuccess="onGLoginSuccess" 
                   :onFailure="onGLoginFailure">
                 </GoogleLogin>
-                <b-link :href="`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${lineLoginParams.client_id}&redirect_uri=${server_url}/api/auth/lineauth&state=signup12&scope=openid%20profile%20email`"><img src="/img/social/line.png"/></b-link>
-                <KakaoLogin :api-key="kakaoLoginParams.api_key" :on-success="onKakaoLoginSuccess" :on-failure="onKakaoLoginFailure" />
+                <!-- <b-link :href="`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${lineLoginParams.client_id}&redirect_uri=${server_url}/api/auth/lineauth&state=signup12&scope=openid%20profile%20email`"><img src="/img/social/line.png"/></b-link>
+                <KakaoLogin :api-key="kakaoLoginParams.api_key" :on-success="onKakaoLoginSuccess" :on-failure="onKakaoLoginFailure" /> -->
               </div>
 
               <!-- <div class="social-links">

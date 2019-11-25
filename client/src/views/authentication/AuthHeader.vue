@@ -4,7 +4,7 @@
       <img src="/img/logo_dark.png"/>
     </b-link>
         
-    <b-dropdown class="language-select">
+    <b-dropdown class="language-select" style="margin-right: 15px;">
       <template v-slot:button-content>
         {{ ($i18n.locale === 'gb') ? "English" : ($i18n.locale === 'jp' ? "日本語" : "한국어") }}
       </template>
