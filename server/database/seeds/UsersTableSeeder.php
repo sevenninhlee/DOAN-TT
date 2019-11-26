@@ -13,8 +13,8 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insertOrIgnore([
             'name' => 'Master Admin',
-            'email' => 'jjung@subdreamstudios.com',
-            'password' => bcrypt('Subdream450'),
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('123123'),
             'admin' => 2,
             'active' => 1
         ]);

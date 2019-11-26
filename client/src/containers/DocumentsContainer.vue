@@ -80,7 +80,8 @@
         <div class="welcome-body">
           <h1>{{ $t('layout.documents.modal.title') }}</h1>
           <div class="subtitle">{{ $t('layout.documents.modal.subtitle') }}</div>
-          <div class="summary">{{ $t('layout.documents.modal.summary') }}</div>
+          <div class="summary"></div>
+          <!-- <div class="summary">{{ $t('layout.documents.modal.summary') }}</div> -->
           <div class="w-100">
             <div class="row">
               <div class="col-sm-6">

@@ -34,7 +34,7 @@ class DocFolderController extends Controller
         $obj = new DocFolder();
         $data = $request->all();
         foreach ($data as $key => $value) {
-            $key === 'parent_id' && $value == 0 ? $value = 0 : $value;
+            $key === 'parent_id' && $value == 0 ? $value = null : $value;
             $obj[$key] = $value;
         }
         // Add Accumulated DocFolder Id
