@@ -13,8 +13,12 @@
           style="position: relative;"
           v-bind:disabled="!old_data"
         >
-        <i v-if="pageLoading && files.length === 0 || addDocument.loading" class="fa fa-spinner fa-spin fa-3x" style="position: absolute; top: 0; left: 33%;" />
-        {{ $t("docsign.next") }}
+          <i
+            v-if="pageLoading && files.length === 0 || addDocument.loading"
+            class="fa fa-spinner fa-spin fa-3x"
+            style="position: absolute; top: 0; left: 33%;"
+          />
+          {{ $t("docsign.next") }}
         </button>
         <button
           v-else
@@ -23,8 +27,13 @@
           v-bind:disabled="files.length === 0 || addDocument.loading"
           style="position: relative;"
         >
-        <i v-if="pageLoading && files.length === 0 || addDocument.loading" class="fa fa-spinner fa-spin fa-3x" style="position: absolute; top: 0; left: 33%;" />
-        {{ $t("docsign.next") }}</button>
+          <i
+            v-if="pageLoading && files.length === 0 || addDocument.loading"
+            class="fa fa-spinner fa-spin fa-3x"
+            style="position: absolute; top: 0; left: 33%;"
+          />
+          {{ $t("docsign.next") }}
+        </button>
       </div>
     </div>
   </div>
@@ -60,34 +69,33 @@ export default {
   computed: {
     ...mapGetters(["addDocument", [DOCUMENT_FILES]])
   },
-  watch: {
-  },
+  watch: {},
   created() {
     if (this.$root && this.$root.uploadFiles && this.$root.isLanding) {
       // this.files = this.$root.uploadFiles;
     } else {
       this.files = [];
-
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     moveNextPage() {
       var isFormat = true;
-      this.files.map( (val, key) => {
-        if(val.type.indexOf("video/mp4") != -1 || val.type.indexOf("audio/mpeg") != -1)
-        {
-          isFormat = false
-          let text = "File "+val.name+" is not a supported format"
+      this.files.map((val, key) => {
+        if (
+          val.type.indexOf("video/mp4") != -1 ||
+          val.type.indexOf("audio/mpeg") != -1
+        ) {
+          isFormat = false;
+          let text = "File " + val.name + " is not a supported format";
           this.$awn.alert(text, {
             position: "bottom-left",
             labels: {
               alert: "Danger Message"
             }
-          })
+          });
         }
-      })
+      });
       if (!this.$route.query.document_id) {
         this.uuid =
           Math.random()
@@ -98,13 +106,13 @@ export default {
       } else {
         this.uuid = this.$route.query.document_id;
       }
-      if(isFormat){
-        if(this.files && this.files.length > 0) {
+      if (isFormat) {
+        if (this.files && this.files.length > 0) {
           let formData = new FormData();
           var filesSocical = [];
-          this.files.map((v,k) => {
-            if(v.downloadUrl) {
-              filesSocical.push(this.files[k])
+          this.files.map((v, k) => {
+            if (v.downloadUrl) {
+              filesSocical.push(this.files[k]);
             } else {
               formData.append("filesBrowser[]", blobToFile(v));
             }
@@ -118,10 +126,12 @@ export default {
                 "/docu-sign/add-recipients?document_id=" + this.uuid
               );
 
-            this.pageLoading = !res
+            this.pageLoading = !res;
           });
-        }else {
-          this.$router.push("/docu-sign/add-recipients?document_id=" + this.uuid);
+        } else {
+          this.$router.push(
+            "/docu-sign/add-recipients?document_id=" + this.uuid
+          );
         }
       }
     },
@@ -130,14 +140,13 @@ export default {
       files &&
         files.length > 0 &&
         files.map(file => {
-          self.files.push(file)
+          self.files.push(file);
         });
     },
     isData(data) {
       data ? (this.old_data = true) : (this.old_data = false);
     }
-  },
-  
+  }
 };
 </script>
 
