@@ -11,6 +11,13 @@ const ResetPassword = () => import("@/views/authentication/ResetPassword")
 
 // const Home = () => import("@/views/Home")
 
+// Sign
+const SignContainer = () => import("../containers/SignContainer");
+const SignCheck = () => import("../views/sign/SignCheck");
+const TestSignCheck = () => import("../views/sign/TestSignCheck");
+const Signing = () => import("../views/sign/Signing");
+const Complition = () => import("../views/sign/Complition");
+
 // Views - Documents
 const UploadDocument = () => import("@/views/documents/Upload")
 const DocumentsContainer = () => import("../containers/DocumentsContainer");
@@ -176,6 +183,35 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: "/sign",
+      redirect: "/sign/check",
+      name: "Sign",
+      component: SignContainer,
+      children: [
+        {
+          path: "check",
+          name: "SignCheck",
+          component: SignCheck,
+          props: route => route
+        },
+        {
+          path: "signing",
+          name: "Signing",
+          component: Signing
+        },
+        {
+          path: "complition",
+          name: "Complition",
+          component: Complition
+        },
+        {
+          path: "prepare",
+          name: "TestSignCheck",
+          component: TestSignCheck
+        },
+      ],
     },
     {
       path: "/profile",

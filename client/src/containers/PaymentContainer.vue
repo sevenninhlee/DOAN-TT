@@ -46,11 +46,11 @@
               v-on:click="gotoPage('/payment/document-list')"
               v-bind:class="getSelected('doc')"
             >{{ $t('layout.payment.header.documents') }}</div>
-            <div
+            <!-- <div
               class="clickable-icon mx-1 mx-sm-2 mx-md-2 mx-lg-4 "
               v-on:click="gotoPage('/payment/template-list')"
               v-bind:class="getSelected('temp')"
-            >{{ $t('layout.payment.header.templates') }}</div>
+            >{{ $t('layout.payment.header.templates') }}</div> -->
           </div>
           <DefaultHeaderDropdownAccnt />
           <!--<AsideToggler class="d-lg-none" mobile />-->
