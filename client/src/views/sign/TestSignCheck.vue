@@ -176,7 +176,7 @@
       <div class="doc-pan">
         <div class="doc-list" v-bind:class="toggleDoc?'': 'closed'">
           <div class="content-container" v-bind:class="toggleDoc?'': 'd-none'">
-            <div class="documents">
+            <!-- <div class="documents">
               <div class="title">
                 <span>DOCUMENTS</span>
               </div>
@@ -207,7 +207,7 @@
                   </b-collapse>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="documents">
               <div class="title">
                 <span>{{ $t("docsign.documents") }}</span>
