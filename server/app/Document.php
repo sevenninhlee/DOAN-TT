@@ -18,8 +18,10 @@ class Document extends Model
     protected $table = 'documents';
 
     protected $fillable = [
-        'document_id', 'document_name', 'document_file', 'creator_id', 'doc_folder_id', 'expiration_days', 'action', 'status', 'comment',
-        'first_request_id', 'password', 'signed_file'
+        'document_id', 'document_name', 'document_file', 
+        'creator_id', 'doc_folder_id', 'expiration_days', 
+        'action', 'status', 'comment','first_request_id', 
+        'password', 'signed_file'
     ];
 
     protected $hidden = [
