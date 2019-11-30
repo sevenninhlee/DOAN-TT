@@ -43,7 +43,7 @@ export default {
             return {
               ...v,
               type: extensionToMimeType(`${v.name.split(".")[1]}`),
-              downloadUrl: v["url"],
+              downloadUrl: v["url"]
             };
           });
         self.$emit("addFiles", attachments, true);

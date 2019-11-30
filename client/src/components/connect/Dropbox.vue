@@ -37,10 +37,10 @@ export default {
                 ...v,
                 type: extensionToMimeType(`${v.name.split(".")[1]}`),
                 size: v.bytes,
-                downloadUrl: v["link"],
+                downloadUrl: v["link"]
               };
             });
-          this.$emit("addFiles", attachments, true );
+          this.$emit("addFiles", attachments, true);
         },
         cancel: function() {},
         linkType: "direct",

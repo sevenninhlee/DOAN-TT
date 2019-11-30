@@ -35,7 +35,7 @@ export default {
         advanced: {
           /** URL CHANGED */
           // endpointHint: config.MICROSOFT.endpointHint
-          redirectUri: config.MICROSOFT.redirectUri,
+          redirectUri: config.MICROSOFT.redirectUri
           // queryParameters: "select=id,name,size,file,folder,photo,@microsoft.graph.downloadUrl",
         },
         success: function(files) {
@@ -49,7 +49,7 @@ export default {
               return {
                 ...v,
                 type: extensionToMimeType(`${v.name.split(".")[1]}`),
-                downloadUrl: v["@microsoft.graph.downloadUrl"],
+                downloadUrl: v["@microsoft.graph.downloadUrl"]
               };
             });
           self.$emit("addFiles", attachments, true);
