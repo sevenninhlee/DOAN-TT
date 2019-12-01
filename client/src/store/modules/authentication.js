@@ -1,21 +1,21 @@
 import JwtService from '../../mixins/jwt.service'
 import { authentication as API } from '../../mixins/authentication'
 
-import { 
+import {
   AUTH_REQUEST,
-  AUTH_SUCCESS, 
-  AUTH_DESTROY, 
-  AUTH_ERROR, 
-  AUTH_MODAL_BTN, 
+  AUTH_SUCCESS,
+  AUTH_DESTROY,
+  AUTH_ERROR,
+  AUTH_MODAL_BTN,
   AUTH_SET_FB,
   AUTH_LOADING
 } from '../actions.type'
-import { 
-  SET_AUTH, 
-  SET_USER, 
-  PURGE_AUTH, 
-  SET_ERROR, 
-  SET_MODAL_BTN, 
+import {
+  SET_AUTH,
+  SET_USER,
+  PURGE_AUTH,
+  SET_ERROR,
+  SET_MODAL_BTN,
   SET_FB,
   SET_LOADING
 } from '../mutations.type'
@@ -47,10 +47,10 @@ const actions = {
     commit(SET_AUTH, token.access_token)
 
     return new Promise((resolve, reject) => {
-        API.methods.user()
+      API.methods.user()
         .then(response => {
           dispatch(AUTH_SUCCESS, response.data.user)
-          
+
           dispatch(AUTH_LOADING, false)
           resolve(response)
         })

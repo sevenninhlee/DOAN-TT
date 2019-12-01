@@ -8,7 +8,7 @@ import {
   USER_UPDATE_REQUEST
 } from '../actions.type'
 
-import { 
+import {
   SET_ERROR,
   CHANGE_IMAGE_SUCCESS,
   CHANGE_IMAGE_ERROR,
@@ -24,16 +24,16 @@ const state = {
 }
 
 const getters = {
-  getUser : state => {
+  getUser: state => {
     return state.userAccount;
   },
-  getAvatarUpload : state => {
+  getAvatarUpload: state => {
     return state.urlAvatar;
   }
 }
 
 const actions = {
-  [CHANGE_IMAGE_REQUEST]: ({commit}, data) => {
+  [CHANGE_IMAGE_REQUEST]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       put('clients/update-avatar', data)
         .then(resp => {
@@ -46,7 +46,7 @@ const actions = {
         })
     })
   },
-  [GET_USER_INFOR_REQUEST]: ({commit}) => {
+  [GET_USER_INFOR_REQUEST]: ({ commit }) => {
     return new Promise((resolve, reject) => {
       get('auth/user')
         .then(resp => {
@@ -90,29 +90,29 @@ const actions = {
 }
 
 const mutations = {
-    [UPDATE_PROFILE_SUCCESS](state, payload) {
-      state.userAccount = payload.user
-    },  
-    [CHANGE_IMAGE_SUCCESS](state, payload) {
-        state.urlAvatar = payload.user.avatar;
-    },
-    [CHANGE_IMAGE_ERROR](state, payload) {
-      state.urlAvatar = null;
-    },
-    [GET_USER_INFOR_SUCCESS](state, payload) {
-      state.userAccount = payload.user;
-    },
-    [GET_USER_INFOR_ERROR](state, payload) {
-       return state.userAccount;
-    },
-    [UPDATE_PASSAUTH_SUCCESS](state, payload) {
-      // Dont know what to do
-    }
-    
+  [UPDATE_PROFILE_SUCCESS](state, payload) {
+    state.userAccount = payload.user
+  },
+  [CHANGE_IMAGE_SUCCESS](state, payload) {
+    state.urlAvatar = payload.user.avatar;
+  },
+  [CHANGE_IMAGE_ERROR](state, payload) {
+    state.urlAvatar = null;
+  },
+  [GET_USER_INFOR_SUCCESS](state, payload) {
+    state.userAccount = payload.user;
+  },
+  [GET_USER_INFOR_ERROR](state, payload) {
+    return state.userAccount;
+  },
+  [UPDATE_PASSAUTH_SUCCESS](state, payload) {
+    // Dont know what to do
+  }
+
 }
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions
 }

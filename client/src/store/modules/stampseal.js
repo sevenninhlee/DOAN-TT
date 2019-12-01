@@ -32,7 +32,7 @@ const actions = {
   [STAMP_CREATE]: (context, stamp) => {
     context.commit(UPDATE_STAMP, stamp)
   },
-  
+
   [STAMP_UPLOAD]: (context, stamp) => {
     context.commit(UPDATE_STAMP, stamp)
   },
@@ -41,13 +41,13 @@ const actions = {
     context.commit(SET_STAMP, stamps)
   },
 
-  [STAMP_UPDATE]: (context, stamp) => {    
+  [STAMP_UPDATE]: (context, stamp) => {
     context.commit(SET_STAMP, stamp)
   },
 
   [STAMP_SOFTDELETE]: (context, id) => {
     context.commit(SOFTDELETE_STAMP, id)
-  }, 
+  },
 
   [STAMP_DESTROY]: (context, id) => {
     context.commit(DESTROY_STAMP, id)
