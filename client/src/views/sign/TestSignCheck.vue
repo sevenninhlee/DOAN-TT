@@ -1,34 +1,6 @@
 <template>
   <div class="app flex-row">
     <div class="w-100">
-      <!-- <div class="d-flex justify-content-between align-items-center">
-        <h1>{{ $t("docsign.prepare.title") }}</h1>
-        <div class="d-flex align-items-center control-actions">
-          <b-button variant="outline-primary" @click="undo">
-            <template>
-              <img src="img/icons/past_changes.svg" class="icon-hover" />
-            </template>
-          </b-button>
-          <b-button variant="outline-primary" @click="redo">
-            <template>
-              <img src="img/icons/next_changes.svg" class="icon-hover" />
-            </template>
-          </b-button>
-          <UserSelect
-            v-bind:value="percent"
-            v-bind:items="['10%','20%', '30%', '50%', '75%','100%', '200%']"
-            @changeValue="changePercent"
-            class="mb-0 mx-2"
-          />
-          <b-button
-            variant="outline-primary"
-            @click="commentsHandle"
-            v-bind:class="commentButtonActive && 'commentButtonActive'"
-          >
-            <UserIcon icon="comment.svg" :button="true" />
-          </b-button>
-        </div>
-      </div> -->
       <div class="d-flex justify-content-between align-items-center">
         <!-- <b-button variant="outline-primary" v-on:click="toggleDoc = !toggleDoc"> -->
         <b-button variant="outline-primary">
@@ -50,9 +22,7 @@
           </b-button>
         </div>
         <div class="d-flex align-items-center control-actions">
-          <!-- <b-button variant="outline-primary">
-            <UserIcon icon="delete.svg" :button="true" />
-          </b-button> -->
+        
           <b-button variant="outline-primary" class="mx-1 mx-md-2">
             <UserIcon icon="download_3.svg" :button="true" />
           </b-button>
@@ -62,152 +32,10 @@
         </div>
       </div>
       <hr class="mb-4" />
-      <!-- <div class="row">
-        <div class="col-md-3 pl-3">
-          <div class="aaa">
-            <div class="content-container">
-              <div class="documents">
-                <div class="title">
-                  <span>{{ $t("docsign.documents") }}</span>
-                </div>
-                <hr />
-                <div class="documents-list">
-                  <div class="document-content" v-for="(file, key) in documentList.data" :key="key">
-                    <div v-if="file.images.length > 0">
-                      <div
-                        class="collapse-header item-title"
-                        v-b-toggle="`document_list_toggle_${key}`"
-                      >
-                        <span class="title">{{file.document_name}}</span>
-                        <span class="collapse-icon">
-                          <i class="fa fa-caret-left" />
-                        </span>
-                      </div>
-                    </div>
-                    <b-collapse :id="`document_list_toggle_${key}`" class="item-pages" visible v-if="file.images.length > 0">
-                      <div
-                        class="page-content"
-                        v-for="(image, imgKey) in file.images"
-                        :key="imgKey"
-                      >
-                        <div
-                          :id="`doc_nav_id_${file.id}_${imgKey}`"
-                          class="pdf-content"
-                          v-on:click="selectPage(file, numpage(image))"
-                        >
-                          <div class="loader_img" v-if="pageLoading">
-                            <i class="fa fa-spinner fa-spin fa-2x" />
-                          </div>
-                          <img :src="`${image}`" class="w-100 selected-pdf main_img" />
-                        </div>
-                        <div class="actionsButton">
-                          <i
-                            class="fa fa-rotate-left mr-2 clickable-icon"
-                            @click="rotateHandle('left', file.id, numpage(image))"
-                          />
-                          <i
-                            class="fa fa-rotate-right mr-2 clickable-icon"
-                            @click="rotateHandle('right', file.id, numpage(image))"
-                          />
-                          <i
-                            class="fa fa-trash clickable-icon"
-                            @click="deleteHandle(file.id, image)"
-                          ></i>
-                          <div class="page-no pull-right">{{imgKey + 1}}</div>
-                        </div>
-                      </div>
-                    </b-collapse>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end flex-wrap pt-4">
-              <button
-                class="btn btn-outline-primary min-width-124px m-1"
-                v-on:click="moveBackPage()"
-              >{{ $t("docsign.back") }}</button>
-              <button
-                class="btn btn-primary min-width-124px m-1"
-                v-on:click="moveNextPage()"
-                style="position: relative"
-              >
-                <i
-                  v-if="nextLoading"
-                  class="fa fa-spinner fa-spin fa-3x"
-                  style="position: absolute; top: 0; left: 33%;"
-                />
-                {{ $t("docsign.next") }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-9 pr-3 pr-sm-0">
-          <div v-if="pageLoading" class="pageLoading">
-            <i class="fa fa-spinner fa-spin fa-3x" />
-          </div>
-          <div v-if="!pageLoading" id="document_container">
-            <div class="wrap_docs">
-              <div
-                v-for="(data, key) in pages"
-                :key="key"
-                :id="`droppable_content_${key + 1}`"
-                :data-page_num="key + 1"
-                :data-doc_id="data.docId"
-                :data-rotate="checkRotate(data, documentList.data[data.pageId])"
-                style="position:relative"
-                class="droppable_content"
-              >
-                <div :id="`doc_id_${data.docId}_${data.pageNum}`" class="content-background">
-                  <div class="loader_img">
-                    <i class="fa fa-spinner fa-spin fa-2x" />
-                  </div>
-                  <img
-                    :src="`${data.image}`"
-                    class="w-100 main_img img_zoom"
-                    v-bind:class="key==viewPage?'selected-pdf':''"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
+ 
       <div class="doc-pan">
         <div class="doc-list" v-bind:class="toggleDoc?'': 'closed'">
           <div class="content-container" v-bind:class="toggleDoc?'': 'd-none'">
-            <!-- <div class="documents">
-              <div class="title">
-                <span>DOCUMENTS</span>
-              </div>
-              <hr />
-              <div class="documents-list">
-                <div class="document-content">
-                  <div class="collapse-header item-title" v-b-toggle.collapse1>
-                    <span>Continuous Improvement lorem ipsum sit dollor amet.doc</span>
-                    <span class="collapse-icon">
-                      <i class="fa fa-caret-down"></i>
-                    </span>
-                  </div>
-                  <b-collapse id="collapse1" class="item-pages" visible>
-                    <div
-                      class="page-content"
-                      v-for="i in numPages"
-                      :key="i"
-                      v-on:click="selectPage(src, i)"
-                    >
-                      <pdf
-                        :src="src"
-                        :page="i"
-                        class="pdf-content"
-                        v-bind:class="i==viewPage?'selected-pdf':''"
-                      ></pdf>
-                      <div class="page-no">{{i}}</div>
-                    </div>
-                  </b-collapse>
-                </div>
-              </div>
-            </div> -->
             <div class="documents">
               <div class="title">
                 <span>{{ $t("docsign.documents") }}</span>
