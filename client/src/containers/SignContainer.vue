@@ -22,7 +22,7 @@
           </div>
           <template v-if="currentStepNo == 0">
             <b-button variant="link" class="mr-1 mr-sm-4">Sign Later</b-button>
-            <b-button variant="other" class="px-2 px-sm-4" v-on:click="gotoPage('/sign/signing')">Start Signing</b-button>
+            <b-button variant="other" class="px-2 px-sm-4" v-on:click="gotoPage()">Start Signing</b-button>
           </template>
           <template v-if="currentStepNo == 1">
             <b-button variant="link" class="mr-1 mr-sm-4">Finish Later</b-button>
@@ -87,7 +87,7 @@ export default {
 
     },
     gotoPage(page) {
-      this.$router.push({ path: page });
+      this.$router.push('/sign/signing?recipient_id=' + this.$route.query.recipient_id + '&document_id=' + this.$route.query.document_id);
     },
     getStyle(no) {
       if (this.currentStepNo == no) {
@@ -106,11 +106,11 @@ export default {
       }
     },
     setOptions() {
-      if (this.$router.history.current.fullPath == "/sign/check") {
+      if (this.$router.history.current.path == "/sign/check") {
         this.currentStepNo = 0;
-      } else if ( this.$router.history.current.fullPath == "/sign/signing") {
+      } else if ( this.$router.history.current.path == "/sign/signing") {
         this.currentStepNo = 1;
-      } else if ( this.$router.history.current.fullPath == "/sign/complition" ) {
+      } else if ( this.$router.history.current.path == "/sign/complition" ) {
         this.currentStepNo = 2;
       } else {
         this.currentStepNo = 0;
