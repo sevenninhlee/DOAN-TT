@@ -118,8 +118,8 @@
             </div>
           </div>
           <div class="text-center">
-            <b-button variant="link" class="mr-0 mr-sm-5" >Sign later</b-button>
-            <b-button variant="other" class="px-2 px-sm-5" v-on:click="moveNextPage()">Start Signing</b-button>
+            <b-button variant="link" class="mr-0 mr-sm-5" >Finish later</b-button>
+            <b-button variant="other" class="px-2 px-sm-5" >Next</b-button>
           </div>
         </div>
       </div>
@@ -450,9 +450,18 @@ export default {
       scrollTo.scrollIntoView();
     },
     moveNextPage() {
+      if (!this.checkUserTool()) {
+        this.$awn.alert("Add at least 1 tool", {
+          position: "bottom-left",
+          labels: {
+            alert: "Danger Message"
+          }
+        });
+        return false;
+      }
       this.nextLoading = true;
-       this.$router.push(
-         '/sign/signing?recipient_id=' + this.$route.query.recipient_id + '&document_id=' + this.$route.query.document_id
+      this.$router.push(
+        "/docu-sign/review?document_id=" + this.$route.query.document_id
       );
     },
     checkUserTool() {
