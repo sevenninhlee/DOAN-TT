@@ -275,6 +275,8 @@ export default {
                   
                 });
             });
+            // console.log("1111111111112222", vm.items, vm.annotations );
+            
             vm.pageLoading = false;
             initialPrepare(vm.pages);
             generalDefaultButton(vm.annotations, vm.items);
@@ -286,8 +288,8 @@ export default {
               this.prepareEvent
             );
           }
-        // console.log('vm.documentList.data', vm.documentList.data[0])
-        // console.log('vm.pages', vm.pages)
+        console.log('vm.documentList.data', JSON.stringify( vm.documentList.data[0]))
+        console.log('vm.pages', vm.pages)
 
         });
       vm.$root.$on("bv::scrollspy::activate", vm.onActivate);

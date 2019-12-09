@@ -245,6 +245,10 @@ export function generalDefaultButton2(annotations, recipientsList, callback) {
 
 export function generalDefaultButton(annotations, recipientsList) {
   $(document).ready(function () {
+    console.log('annotations', JSON.parse(JSON.stringify( annotations)) )
+    console.log('recipientsList', JSON.parse(JSON.stringify( recipientsList)) )
+
+    
     annotations.map((annotation, key) => {
       let recipient = recipientsList.filter(v => annotation.actor_id === v.id);
       annotation.actor = recipient && recipient.length > 0 && recipient[0];
@@ -258,8 +262,10 @@ export function generalDefaultButton(annotations, recipientsList) {
           data-color='${annotation.actor && annotation.actor.color}'
           data-tool='${addDataToElement(annotation.creator_id, annotation.actor, tool)}'
           data-annotation_id='${annotation.id}'
+          id='abcs_${annotation.id}'
           class='user-drag drag-success user-can-delete tool-sign tool_sign_${annotation.id}'
           style='${element_style}'
+          onclick="myFunction()"
         >
           <i class="${tool.icon}" />
           <span>${tool.label}</span>

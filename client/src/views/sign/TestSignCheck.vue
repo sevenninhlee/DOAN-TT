@@ -160,10 +160,13 @@ import {
   addCommentToDocument,
   rotateFunction,
   deleteSuccessHandle
-} from "../../helpers/prepareHandle";
+} from "../../helpers/signHandle";
 import {
   generalDefaultButton,
 } from "../../helpers/signHandle";
+import {
+  index,
+} from "../../helpers/pareSign";
 import config from "../../config/config";
 import { EventBus } from "../../config/event-bus";
 
@@ -280,14 +283,14 @@ export default {
             generalDefaultButton(vm.annotations, vm.items);
 
             // general drop
-            prepareHandle(
-              vm.pages.map((v, key) => key),
-              this.recipientsList,
-              this.prepareEvent
-            );
+            // prepareHandle(
+            //   vm.pages.map((v, key) => key),
+            //   this.recipientsList,
+            //   this.prepareEvent
+            // );
           }
-        // console.log('vm.documentList.data', vm.documentList.data[0])
-        // console.log('vm.pages', vm.pages)
+        // console.log('vm.documentList.data',  JSON.stringify(  vm.documentList.data[0].images))
+        // console.log('vm.pages',  JSON.stringify(  vm.pages))
 
         });
       vm.$root.$on("bv::scrollspy::activate", vm.onActivate);
