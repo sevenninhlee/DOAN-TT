@@ -17,6 +17,5 @@
     </div>
 
     <script src="{{ mix('js/main.js') }}"></script>
-    <script src="{{ mix('js/mainsss.js') }}"></script>
 </body>
 </html>
