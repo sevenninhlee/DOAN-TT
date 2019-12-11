@@ -194,7 +194,7 @@ export function generalDefaultButton2(annotations, recipientsList, callback) {
       const page_num = annotation.page_num;
       let _dropableContentId = `${droppableContent}${page_num}`;
 
-      let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 1111; width: 143px; height: 31px;`;
+      let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 11; width: 143px; height: 31px;`;
 
       let new_element = `
         <span
@@ -255,17 +255,17 @@ export function generalDefaultButton(annotations, recipientsList) {
       let tool = prepareTools.find(v => v.name === annotation.type_tools);
       const page_num = annotation.page_num;
       let _dropableContentId = `${droppableContent}${page_num}`;
-      let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 1111; width: 143px; height: 31px;`;
+      let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 11; width: 143px; height: 31px;`;
 
       let new_element = `
         <span
           data-color='${annotation.actor && annotation.actor.color}'
           data-tool='${addDataToElement(annotation.creator_id, annotation.actor, tool)}'
           data-annotation_id='${annotation.id}'
-          id='abcs_${annotation.id}'
+          id='annotation_tool_id_${annotation.id}'
           class='user-drag drag-success user-can-delete tool-sign tool_sign_${annotation.id}'
           style='${element_style}'
-          onclick="myFunction()"
+          
         >
           <i class="${tool.icon}" />
           <span>${tool.label}</span>
@@ -675,7 +675,7 @@ export const prepareTools = [
   { name: "title", label: "Title", icon: "fa fa-briefcase" },
   { name: "text", label: "Text", icon: "fa fa-file-text" },
   { name: "date_signed", label: "Date Signed", icon: "fa fa-calendar" },
-  { name: "attachments", label: "Attachments", icon: "fa fa-paperclip" }
+  // { name: "attachments", label: "Attachments", icon: "fa fa-paperclip" }
 ];
 
 var restore_state = []

@@ -22,13 +22,13 @@
             @changeValue="changePercent"
             class="mb-0 mx-2"
           />
-          <b-button
+          <!-- <b-button
             variant="outline-primary"
             @click="commentsHandle"
             v-bind:class="commentButtonActive && 'commentButtonActive'"
           >
             <UserIcon icon="comment.svg" :button="true" />
-          </b-button>
+          </b-button> -->
         </div>
       </div>
       <hr class="mb-4" />
@@ -50,7 +50,7 @@
                 class="droppable_content"
               >
                 <div :id="`doc_id_${data.docId}_${data.pageNum}`" class="content-background">
-                  <div class="loader_img">
+                  <div class="loader_img" v-if="pageLoading">
                     <i class="fa fa-spinner fa-spin fa-2x" />
                   </div>
                   <img

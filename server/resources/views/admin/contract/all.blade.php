@@ -24,10 +24,7 @@
               <th>Amount File</th>
               <th>Status</th>
               <th>Update At</th>
-<<<<<<< HEAD
-=======
               <th>Owner</th>
->>>>>>> duong
               <th>Recipients</th>
               <th>Action</th>
             </tr>
@@ -45,14 +42,10 @@
                 {{ $item->updated_at }}
               </td>
               <td>
-<<<<<<< HEAD
-              <button href="#" data-toggle="modal" data-target="#viewRecipients{{ $item->document_id }}" type="button" class="btn btn-primary view-record" alt="3986" title="view">Recipients</button>
-=======
                 <button href="#" data-toggle="modal" data-target="#viewOwner{{ $item->document_id }}" type="button" class="btn btn-primary view-record" alt="3986" title="view">Owner</button>
               </td>
               <td>
                 <button href="#" data-toggle="modal" data-target="#viewRecipients{{ $item->document_id }}" type="button" class="btn btn-primary view-record" alt="3986" title="view">Recipients</button>
->>>>>>> duong
               </td>
               <td class="btn-act">
                   <button href="#" data-toggle="modal" data-target="#confirmDelete{{ $item->document_id }}" type="button" class="btn btn-danger del-record" alt="3986"><i class="fa fa-remove"></i></button>
@@ -85,10 +78,7 @@
       </div>
 
       @foreach ($list as $item)
-<<<<<<< HEAD
-=======
       <!-- Recipients -->
->>>>>>> duong
       <div class="modal fade" id="viewRecipients{{ $item->document_id }}" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">

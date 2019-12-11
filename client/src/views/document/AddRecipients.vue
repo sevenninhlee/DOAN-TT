@@ -291,11 +291,11 @@ export default {
           name: "Receives a Copy",
           class: "fa fa-cc"
         },
-        {
-          value: "signer",
-          name: "In personal signer",
-          class: "fa fa-eye"
-        }
+        // {
+        //   value: "signer",
+        //   name: "In personal signer",
+        //   class: "fa fa-eye"
+        // }
       ],
       documents: [
         {

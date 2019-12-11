@@ -130,7 +130,6 @@
 <script>
 import "bootstrap/dist/js/bootstrap.min.js";
 import "bootstrap-multiselect/dist/css/bootstrap-multiselect.css";
-
 import { mapGetters } from "vuex";
 import UserIcon from "../../components/UserIcon";
 import UserSelect from "../../components/UserSelect";
@@ -205,7 +204,13 @@ export default {
     };
   },
   mounted() {
-    // $("<span>geeks Writer !!!</span>").appendTo(`#doc_id_80_1`); 
+
+    // $(document).on('click', '.tool-sign', function(){
+    //   console.log("arrt", $(this).attr("data-tool"));
+      
+    // });
+
+
     let vm = this;
     let backendUrl = `${config.BASE_URL}`;
     let document_id = vm.$route.query.document_id;

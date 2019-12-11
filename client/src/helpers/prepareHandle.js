@@ -636,7 +636,7 @@ export const prepareTools = [
   { name: "title", label: "Title", icon: "fa fa-briefcase" },
   { name: "text", label: "Text", icon: "fa fa-file-text" },
   { name: "date_signed", label: "Date Signed", icon: "fa fa-calendar" },
-  { name: "attachments", label: "Attachments", icon: "fa fa-paperclip" }
+  // { name: "attachments", label: "Attachments", icon: "fa fa-paperclip" }
 ];
 
 var restore_state = []

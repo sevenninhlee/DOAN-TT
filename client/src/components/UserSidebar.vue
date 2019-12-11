@@ -61,7 +61,7 @@ export default {
       { name: "Date Signed", icon: "fa fa-calendar" },
       { name: "Initials", icon: "initial.png", img_mode: true},
       { name: "Stamp", icon: "stamp.png", img_mode: true},
-      { name: "Attachments", icon: "fa fa-paperclip" },
+      // { name: "Attachments", icon: "fa fa-paperclip" },
     ];
     const items = this.navItems.map(item => {
       const children = tools.map(tool => {

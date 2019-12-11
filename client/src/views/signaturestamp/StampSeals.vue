@@ -96,7 +96,7 @@
               {{ $t('signature.modal.tab.personnelSeal') }}
             </b-button>
           </div>
-          <div class="col-4 px-2 px-md-3">
+          <!-- <div class="col-4 px-2 px-md-3">
             <b-button
               class="stamp-tab-nav"
               :variant="config_val.navtab_index == 'Corporate' ? 'primary' : 'outline-primary'"
@@ -105,7 +105,7 @@
             >
               {{ $t('signature.modal.tab.corporateSeal') }}
             </b-button>
-          </div>
+          </div> -->
           <div class="col-4 pl-0 pl-md-3">
             <b-button
               class="stamp-tab-nav"

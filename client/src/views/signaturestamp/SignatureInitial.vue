@@ -483,8 +483,7 @@ export default {
         console.log(errors.response)
       });
 
-      console.log("1111111111111111", this.SIGNATURES);
-      
+       console.log('SIGNATURES', JSON.parse(JSON.stringify( this.SIGNATURES)) )
 
     vm.form_data.signature_text = vm.USER.name
     vm.form_data.initial = vm.USER.first_name.substring(0,1) + vm.USER.last_name.substring(0,1)

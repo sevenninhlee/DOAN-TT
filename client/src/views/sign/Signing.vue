@@ -6,7 +6,6 @@
         <b-button variant="outline-primary">
           <UserIcon icon="doc_2.svg" :button="true" />
         </b-button>
-        
         <div class="d-flex align-items-center control-actions">
           <b-button variant="outline-primary"  v-on:click="zoom_out()" class="d-none d-sm-inline">
             <UserIcon icon="plus.svg" :button="true"/>
@@ -123,6 +122,311 @@
           </div>
         </div>
       </div>
+
+
+
+
+
+  <!-- MODAL -->
+    <b-modal 
+      id="create-signature-modal" 
+      ref="create-signature-modal" 
+      hide-footer size="xl" 
+      :no-close-on-backdrop="true" 
+      :no-close-on-esc="true"
+      :hide-header-close="true">
+      <div class="create-signature-modal">
+        <div class="title">
+          {{ $t('signature.modal.titleSign') }}
+        </div>
+        <!-- Tab Menu -->
+        <div class="row mb-md-4 mb-2">
+          <div class="col-4 pr-0 pr-md-3">
+            <b-button
+              class="stamp-tab-nav"
+              :variant="config_val.navtab_index == 'Choose' ? 'primary' : 'outline-primary'"
+              v-on:click="() => {
+                config_val.navtab_index = 'Choose'
+                drawing_data.signature.drawable=false
+                drawing_data.initial.drawable=false
+              }" 
+              block
+            >
+              {{ $t('signature.modal.tab.choose') }}
+            </b-button>
+          </div>
+          <div class="col-4 px-2 px-md-3">
+            <b-button
+              class="stamp-tab-nav"
+              :variant="config_val.navtab_index == 'Draw' ? 'primary' : 'outline-primary'"
+              v-on:click="() => {
+                config_val.navtab_index = 'Draw'
+                drawing_data.signature.drawable=false
+                drawing_data.initial.drawable=false
+              }" 
+              block
+            >
+              {{ $t('signature.modal.tab.draw') }}
+            </b-button>
+          </div>
+          <div class="col-4 pl-0 pl-md-3">
+            <b-button
+              class="stamp-tab-nav"
+              :variant="config_val.navtab_index == 'Upload' ? 'primary' : 'outline-primary'"
+              v-on:click="() => {
+                config_val.navtab_index = 'Upload'
+                drawing_data.signature.drawable=false
+                drawing_data.initial.drawable=false
+              }" 
+              block
+            >
+              {{ $t('signature.modal.tab.upload') }}
+            </b-button>
+          </div>
+        </div>
+        <!-- End Tab Menu -->
+
+        <!-- Create Form -->
+        <div>
+          <!-- Generate Signature & Initial -->
+          <div class="row mb-4" v-if="config_val.navtab_index == 'Choose'">
+            <div class="col px-sm-3 px-1">
+              <hr />
+              <div class="row mb-1">
+                <!-- Select Language -->
+                <div class="col-lg-2 col-12 pr-lg-1">
+                  <UserSelect
+                    v-bind:value="form_data.language"
+                    v-bind:items="['English', 'Korean', 'Japanese']"
+                    v-model="form_data.language"
+                    @changeValue="onSyncLanguage"
+                  />
+                </div>
+                <!-- Input Name -->
+                <div class="col-lg-7 col-md-8 col-12 px-lg-1 pr-md-1">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      :class="{
+                        'form-control': true,
+                        'input-invalid': false,
+                        'input-valid': true
+                      }"
+                      id="signature_text"
+                      name="signature_text"
+                      v-model="form_data.signature_text"
+                      :placeholder="$t('signature.modal.placeholderFullname')"
+                      :maxlength="25"
+                      @changeValue="form_data.signature_text = $event"
+                      v-on:keyup="onChangeName"
+                    />
+                    <p v-if="form_data.signature_text >= 25" class="validation-error text-left pl-2">
+                      <!-- Validation Response Error -->
+                    </p>
+                  </div>
+                </div>
+                <!-- Input Initial -->
+                <div class="col-lg-3 col-md-4 col-12 pl-md-1 ">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      :class="{
+                        'form-control': true,
+                        'input-invalid': false,
+                        'input-valid': true
+                      }"
+                      id="initial"
+                      name="initial"
+                      v-model="form_data.initial"
+                      :placeholder="$t('signature.modal.placeholderInitials')"
+                      :maxlength="4"
+                      @changeValue="form_data.initial = $event"
+                    />
+                    <p  v-if="form_data.initial >= 25" class="validation-error text-left pl-2">
+                      <!-- Validation Response Error -->
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Generated Signature & Initial -->
+              <div class="signatures" style="overflow-x: hidden">
+                <div v-for="(item, index) in config_val.languages[form_data.language]"
+                  v-bind:key="index"
+                  :class="{
+                    'sign-result': true,
+                    'checked': index == config_val.navtab_selected
+                  }"
+                  v-on:click="onSelectSignature(index)"
+                >
+                  <div class="row">
+                    <div class="col-sm-8 col-12 m-auto">
+                      <div class="d-flex flex-column justify-content-between px-md-2" style="width: inherit;">
+                        <div class="signed-by">{{ $t('signature.modal.signby') }}</div>
+                        <div class="signature-text">
+                          <GenerateSvg 
+                            ref="generatedSign" 
+                            :paramsData="{
+                              idData: index,
+                              type: 'Signature',
+                              text: form_data.signature_text,
+                              fontFace: item,
+                              lang: form_data.language == 'English' ? 'gb' : form_data.language == 'Korean' ? 'kr' : 'jp'
+                            }" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-1 col-12 m-auto">
+                      <div class="right-border"></div>
+                    </div>
+                    <div class="col-sm-3 col-12 m-auto">
+                      <div class="signature-text pt-md-2">
+                        <GenerateSvg 
+                          ref="generatedInitial"
+                          :paramsData="{
+                            idData: index,
+                            type: 'Initial',
+                            text: form_data.initial,
+                            fontFace: item,
+                            lang: form_data.language == 'English' ? 'gb' : form_data.language == 'Korean' ? 'kr' : 'jp'
+                          }"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="check-box" v-if="config_val.navtab_selected == index">
+                    <img src="img/icons/check-2.svg" />
+                  </div>
+                </div>
+              </div>
+              <!-- End Generated Signature & Initial -->
+            </div>
+          </div>
+
+          <!-- Draw Signature & Initial -->
+          <div v-else-if="config_val.navtab_index == 'Draw'" class="row mb-4">
+            <div class="col-lg-8 col-12 pr-lg-1 mb-3 mb-lg-0">
+              <div ref="container-for-signature" class="content-dash draw-signature">
+                <div
+                  class="draw-placeholder clickable-icon"
+                  v-if="!drawing_data.signature.drawable"
+                  v-on:click="drawing_data.signature.drawable=true"
+                >
+                  <img src="img/icons/pencil-draw.svg" />
+                  <div class="mt-3">{{ $t('signature.modal.drawSign') }}</div>
+                </div>
+                <div class="canvas-container">
+                  <drawing-board
+                    id="drawboard-sign"
+                    v-if="drawing_data.signature.drawable" 
+                    v-bind:key="drawing_data.signature.index" 
+                    :paramData="drawing_data.signature"
+                    :drawSize="{
+                      width: getContainerWidth('container-for-signature'),
+                      height: getContainerHeight('container-for-signature'),
+                    }"
+                    ref="drawboard-sign"
+                    class="draw-pan" 
+                  />
+                </div>
+                <div v-if="drawing_data.signature.drawable">
+                  <b-button variant="link" v-on:click="drawing_data.signature.drawable=false">
+                    <i class="fa fa-undo" /> {{ $t('signature.button.reset') }}
+                  </b-button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg col pl-lg-1 pb-2">
+              <div ref="container-for-initial" class="content-dash draw-initials">
+                <div
+                  class="draw-placeholder clickable-icon"
+                  v-if="!drawing_data.initial.drawable"
+                  v-on:click="drawing_data.initial.drawable=true"
+                >
+                  <img src="img/icons/pencil-draw.svg" />
+                  <div class="mt-3">{{ $t('signature.modal.drawInitials') }}</div>
+                </div>
+                <div class="canvas-container">
+                  <drawing-board 
+                    id="drawboard-ini"
+                    v-if="drawing_data.initial.drawable" 
+                    v-bind:key="drawing_data.initial.index" 
+                    :paramData="drawing_data.initial"
+                    :drawSize="{
+                      width: getContainerWidth('container-for-initial'),
+                      height: getContainerHeight('container-for-initial'),
+                    }"
+                    ref="drawboard-initial"
+                    class="draw-pan" 
+                  />
+                </div>
+                <div v-if="drawing_data.initial.drawable">
+                  <b-button variant="link" v-on:click="drawing_data.initial.drawable=false">
+                    <i class="fa fa-undo" /> {{ $t('signature.button.reset') }}
+                  </b-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Stamp -->
+          <div v-else class="row mb-4">
+            <div class="col-lg-8 col-12 pr-lg-1 mb-3 mb-lg-0">
+              <ImageUpload 
+                v-bind:files="signature_file" 
+                v-bind:config_file="({
+                  img: 'img/icons/upload.svg',
+                  text: $t('signature.modal.uploadSign')
+                })"
+                v-on:toggle="toggleSignUpload($event)" 
+              />
+            </div>
+            <div class="col-lg col pl-lg-1 pb-2">
+              <ImageUpload 
+                v-bind:files="initial_file" 
+                v-bind:config_file="({
+                  img: 'img/icons/upload.svg',
+                  text: $t('signature.modal.uploadInitials')
+                })" 
+                v-on:toggle="toggleInitialUpload($event)"
+              />
+            </div>
+          </div>
+          <hr />
+
+          <div class="footer">
+            <div class="summary">
+              {{ $t('signature.modal.tncSign') }}
+            </div>
+            <div class="buttons">
+              <b-button variant="link" v-on:click="hideSignInitialModal">
+                <span>
+                  <i class="fa fa-close"></i> {{ $t('signature.button.cancel') }}
+                </span>
+              </b-button>
+
+              <div v-if="config_val.navtab_index == 'Choose'">
+                <b-button v-if="user_sign" variant="primary" v-on:click="onUpdateSignInitial">Update</b-button>
+                <b-button v-else variant="primary" v-on:click="onCreateSignInitial">{{ $t('signature.button.create') }}</b-button>
+              </div>
+              <div v-else-if="config_val.navtab_index == 'Draw'">
+                <b-button variant="primary" v-on:click="onDrawSignInitial">{{ $t('signature.button.create') }}</b-button>
+              </div>
+              <div v-else>
+                <b-button variant="primary" v-on:click="onUploadSignInitial">{{ $t('signature.button.create') }}</b-button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </b-modal>
+    <!-- END MODAL -->
     </div>
   </div>
 </template>
@@ -166,6 +470,8 @@ import {
 } from "../../helpers/signHandle";
 import config from "../../config/config";
 import { EventBus } from "../../config/event-bus";
+import DrawingBoard from '../../components/DrawingBoard'
+import ImageUpload from '../../components/common/ImageUpload'
 
 export default {
   name: "Prepare",
@@ -173,10 +479,13 @@ export default {
     pdf,
     UserIcon,
     UserSelect,
-    draggable
+    draggable,
+    DrawingBoard, 
+    ImageUpload,
+    GenerateSvg: () => import('../../components/common/GenerateSvg')
   },
   computed: {
-    ...mapGetters(["addDocument", [GET_DOCUMENT_REQUEST], "getRecipients"])
+    ...mapGetters(["addDocument", [GET_DOCUMENT_REQUEST], "getRecipients", 'USER', 'SIGNATURES', 'loading', 'errors'])
   },
   data() {
     return {
@@ -197,13 +506,107 @@ export default {
       commentButtonActive: false,
       recipientsList: [],
       items:[],
-
       toggleDoc: true,
+
+    // data sign
+
+      user_selected_sign: 0,
+      user_sign: "",
+      form_data: {
+        signature_type: 'Choose',
+        initial: '',
+        signature_text: '',
+        font_face: '',
+        font_size: '',
+        language: 'English',
+        uploaded_url: ''
+      },
+      s_data: {
+        signature_type: 'Choose',
+        initial: '',
+        signature_text: '',
+        font_face: '',
+        font_size: '',
+        language: 'English',
+        uploaded_url: '',
+        initial_uploaded_url: ''
+      },
+      generate_data: {
+        signature_type: 'Choose',
+        initial: '',
+        text: '',
+        font_face: '',
+        font_size: '',
+        language: 'English',
+        uploaded_url: ''
+      },
+      generate_img: {
+        signature: '',
+        initial: ''
+      },
+
+      drawing_data: {
+        signature: {
+          name: 'signature',
+          drawing: '',
+          drawable: false
+        },
+        initial: {
+          name: 'initial',
+          drawing: '',
+          drawable: false
+        }
+      },
+
+      signature_file: [],
+      initial_file: [],
+      uploadSignComponent: [],
+      uploadInitialComponent: [],
+
+      validator: {
+        
+      },
+      config_val: {
+        navtab_index: 'Choose',
+        navtab_selected: '0',
+        lang_short: 'gb',
+        generated_show: false,
+        languages: {
+          /** English */
+          English: ["Mrs Saint Delafield", "Badhead Typeface", "Banthers", "Connoisseurs", "Cutepunk_Regular", "Elrotex Basic", "GreatVibes-Regular", "KLSweetPineappleRegular", "Mightype Script", "pops_08_REGULAR", "somethingwild-Regular"],
+          /** Korean */
+          Korean: ["KimNamyun", "KCC-eunyoung", "Goyang", "SangSangFlowerRoad", "InkLipquid", "OTEnjoystoriesBA", "Dovemayo-Medium", "SDMiSaeng", "HSGyoulnoonkot", "Jeju Hallasan"],
+          /** Japanese */
+          Japanese: ["AsobiMemogaki-Regular-1-01", "crayon_1-1", "RiiPopkkR", "RiiT_F", "sjis_sp_setofont", "GenEiLateGoN_v2", "GenEiAntiquePv5-M"]
+        },
+        fontsize: {
+          // English
+          English: ["26", "29", "19", "29", "29", "14", "21", "29", "19", "18", "29"],
+          // Korean
+          Korean: ["27", "23", "21", "26", "23", "23", "16", "24", "17", "16"],
+          // Korean: ["27", "35", "22", "38", "32", "36", "21", "34", "19", "21"],
+          // Japanese
+          Japanese: ["24", "23", "21", "26", "23", "23", "20"]
+        },
+      }
+
+
+
+
     };
   },
   mounted() {
-    // $("<span>geeks Writer !!!</span>").appendTo(`#doc_id_80_1`); 
-    let vm = this;
+    
+  let vm = this;
+
+  $(document).on('click', '.tool-sign', function(){
+      console.log("arrt", $(this).attr("data-tool"));
+      vm.showSignInitialModal();
+      // this.$refs["create-signature-modal"].show();
+      // $('#create-signature-modal').show()
+    });
+
+
     let backendUrl = `${config.BASE_URL}`;
     let document_id = vm.$route.query.document_id;
     vm.pages = [];
@@ -282,17 +685,118 @@ export default {
             generalDefaultButton(vm.annotations, vm.items);
 
             // general drop
-            prepareHandle(
-              vm.pages.map((v, key) => key),
-              this.recipientsList,
-              this.prepareEvent
-            );
+            // prepareHandle(
+            //   vm.pages.map((v, key) => key),
+            //   this.recipientsList,
+            //   this.prepareEvent
+            // );
           }
-        console.log('vm.documentList.data', JSON.stringify( vm.documentList.data[0]))
-        console.log('vm.pages', vm.pages)
+        // console.log('vm.documentList.data', JSON.stringify( vm.documentList.data[0]))
+        // console.log('vm.pages', vm.pages)
 
         });
       vm.$root.$on("bv::scrollspy::activate", vm.onActivate);
+    },
+     showSignInitialModal () {
+      if (!this.form_data.signature_text) {
+        this.form_data.signature_text = this.USER.name
+        this.form_data.initial = this.USER.first_name.substring(0,1) + this.USER.last_name.substring(0,1)
+      }
+
+      this.$refs["create-signature-modal"].show();
+    },
+    hideSignInitialModal: function () {
+      // this.clearSForm()
+      this.$refs["create-signature-modal"].hide();
+    },
+    clearSForm() {
+      Object.assign(this.$data, this.$options.data.apply(this))
+    },
+     onSyncLanguage: function(e) {
+      this.form_data.language = e
+
+      this.config_val.lang_short = this.form_data.language == 'English' ? 'gb' : this.form_data.language == 'Korean' ? 'kr' : 'jp'
+    },
+     onChangeName() {
+      var matches = this.form_data.signature_text.match(/\b(\w)/g); // ['J','S','O','N']
+      this.form_data.initial = matches ? matches.join('') : ''; // JSON
+    },
+     onCreateSignInitial: function () {
+      var vm = this
+
+      store.dispatch(AUTH_LOADING, true)
+
+      vm.fontface()
+        .then(response => {
+          /** Signature */
+          // append style in svg
+          let defs = vm.$refs["generatedSign"][vm.config_val.navtab_selected].$refs["childSignSvg"].children["2"],
+              styles = document.createElementNS("http://www.w3.org/2000/svg", "style"),
+              node = document.createTextNode(response);              
+          defs.appendChild(styles);
+          styles.appendChild(node);
+
+          let svgNode = vm.$refs["generatedSign"][vm.config_val.navtab_selected].$refs.childSignSvg,
+              sSign = new XMLSerializer().serializeToString(svgNode);
+
+          let pngBaseSign = this.svgToPng(sSign, 812, 412, 0)
+          
+          /** Initial */
+          // append style in svg
+          let defsIni = vm.$refs["generatedInitial"][vm.config_val.navtab_selected].$refs["childSignSvg"].children["2"],
+              stylesIni = document.createElementNS("http://www.w3.org/2000/svg", "style"),
+              nodeIni = document.createTextNode(response);              
+          defsIni.appendChild(stylesIni);
+          stylesIni.appendChild(nodeIni);
+
+          let svgNodeIni = vm.$refs["generatedInitial"][vm.config_val.navtab_selected].$refs.childSignSvg,
+              sInit = new XMLSerializer().serializeToString(svgNodeIni);
+
+          let pngBaseInit = this.svgToPng(sInit, 412, 412, 0)
+
+          pngBaseSign.then(resultSign => {
+            pngBaseInit.then(resultInit => {
+              vm.s_data = {
+                signature_type: vm.config_val.navtab_index,
+                initial: vm.form_data.initial,
+                signature_text: vm.form_data.signature_text,
+                font_face: vm.config_val.languages[vm.form_data.language][vm.config_val.navtab_selected],
+                font_size: vm.config_val.fontsize[vm.form_data.language][vm.config_val.navtab_selected],
+                language: vm.form_data.language,
+                uploaded_url: resultSign,
+                initial_uploaded_url: resultInit
+              }
+
+              vm.createSignature(vm.s_data)
+                .then(response => {
+                  store.dispatch(SIGNATURE_CREATE, response.data.data)
+                    .then(() => {
+                      vm.$toast.success({
+                        title: "Signature and Initial Created",
+                        message: "User's signature and initial have created!"
+                      })
+                
+                      vm.$refs["create-signature-modal"].hide()
+                      store.dispatch(AUTH_LOADING, false)               
+                    })
+                })
+              })
+          })        
+      })
+      .catch(errors => {
+        store.dispatch(AUTH_LOADING, false)
+        console.log(errors)
+      })   
+    },
+     /** Draw Signature & Initial */
+    onDrawSignInitial: function () {
+      var vm = this
+
+      let s_image = {
+        sign_image: vm.getDataURLSign(),
+        initial_image: vm.getDataURLInitial()
+      }
+      vm.uploadFiles(s_image)
     },
     deleteHandle(docId, imgUrl) {
       let numPage = this.numpage(imgUrl);
@@ -531,6 +1035,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./TestSignCheck.scss";
+@import "./Signing.scss";
+@import "../signaturestamp/Signature.scss";
 </style>
 
