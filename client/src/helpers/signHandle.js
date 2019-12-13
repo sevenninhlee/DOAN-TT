@@ -243,39 +243,41 @@ export function generalDefaultButton2(annotations, recipientsList, callback) {
   });
 }
 
-export function generalDefaultButton(annotations, recipientsList) {
+export function generalDefaultButton(annotations, recipientsList, recipient_id) {
   $(document).ready(function () {
     console.log('annotations', JSON.parse(JSON.stringify( annotations)) )
     console.log('recipientsList', JSON.parse(JSON.stringify( recipientsList)) )
+    console.log('recipient_id', JSON.parse(JSON.stringify( recipient_id)) )
 
     
     annotations.map((annotation, key) => {
-      let recipient = recipientsList.filter(v => annotation.actor_id === v.id);
+      let recipient = recipientsList.filter(v => annotation.actor_id === v.id && v.id === Number(recipient_id) );
+      
       annotation.actor = recipient && recipient.length > 0 && recipient[0];
-      let tool = prepareTools.find(v => v.name === annotation.type_tools);
-      const page_num = annotation.page_num;
-      let _dropableContentId = `${droppableContent}${page_num}`;
-      let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 11; width: 143px; height: 31px;`;
-
-      let new_element = `
-        <span
-          data-color='${annotation.actor && annotation.actor.color}'
-          data-tool='${addDataToElement(annotation.creator_id, annotation.actor, tool)}'
-          data-annotation_id='${annotation.id}'
-          id='annotation_tool_id_${annotation.id}'
-          class='user-drag drag-success user-can-delete tool-sign tool_sign_${annotation.id}'
-          style='${element_style}'
-          
-        >
-          <i class="${tool.icon}" />
-          <span>${tool.label}</span>
-        </span>
-      `;
-      new_element = $($.parseHTML(new_element)[1]);
-
-      new_element.detach().appendTo(`#${_dropableContentId}`);
-      // console.log('_dropableContentId_______',  _dropableContentId)
-      // $("<span>geeks Writer !!!</span>").appendTo(`#${_dropableContentId}`);
+      if (annotation.actor) {
+        let tool = prepareTools.find(v => v.name === annotation.type_tools);
+        const page_num = annotation.page_num;
+        let _dropableContentId = `${droppableContent}${page_num}`;
+        let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 11; width: 143px; height: 31px;`;
+  
+        let new_element = `
+          <span
+            data-color='${annotation.actor && annotation.actor.color}'
+            data-tool='${addDataToElement(annotation.creator_id, annotation.actor, annotation.id, tool)}'
+            data-annotation_id='${annotation.id}'
+            id='annotation_tool_id_${annotation.id}'
+            class='user-drag drag-success user-can-delete tool-sign tool_sign_${annotation.id}'
+            style='${element_style}'
+            
+          >
+            <i class="${tool.icon}" />
+            <span>${tool.label}</span>
+          </span>
+        `;
+        new_element = $($.parseHTML(new_element)[1]);
+  
+        new_element.detach().appendTo(`#${_dropableContentId}`);
+      }
     })
   })
 }
@@ -284,8 +286,8 @@ export function unredoButton(id, type) {
   type === "undo" ? $(".tool_sign_" + id).hide() : $(".tool_sign_" + id).show()
 }
 
-function addDataToElement(creator_id, item, tool) {
-  return JSON.stringify({ ...omit(item, ["children", "pivot", "phone", "password", "created_at", "updated_at"]), tool: { ...tool }, clientId: creator_id });
+function addDataToElement(creator_id, item, annotation_id, tool) {
+  return JSON.stringify({ ...omit(item, ["children", "pivot", "phone", "password", "created_at", "updated_at"]), annotation_id, tool: { ...tool }, clientId: creator_id });
 }
 
 export function initialPrepare(pages) {

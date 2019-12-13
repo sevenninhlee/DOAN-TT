@@ -117,14 +117,69 @@
             </div>
           </div>
           <div class="text-center">
+             <img
+                class="navbar-brand-full"
+                v-if="{ signature_img }"
+                :src="`${signature_img}`"
+                width="125"
+                height="41"
+                alt="Coffee Sign"
+              />
             <b-button variant="link" class="mr-0 mr-sm-5" >Finish later</b-button>
-            <b-button variant="other" class="px-2 px-sm-5" >Next</b-button>
+            <b-button variant="other" class="px-2 px-sm-5" v-on:click="finishSign()" >Finish</b-button>
           </div>
         </div>
       </div>
 
 
-
+ <b-modal id="sign-agree-modal" ref="sign-agree-modal"
+       hide-footer centered size="xl">
+      <div class="sign-agree-modal">
+        <div class="text-center"><img src="img/icons/agree.svg" /></div>
+        <div class="title">Accept all signatures for electronic signatures</div>
+        <div class="agree-items"> 
+          <div class="agree-item">
+            <i class="fa fa-check mr-2"></i>
+            <div class="agree-text">
+              I agree to the legal validity of electronic signatures and electronic documents.
+            </div>            
+          </div>
+          <div class="agree-item">
+            <i class="fa fa-check mr-2"></i>
+            <div class="agree-text">
+              The electronic document sent after the signing is accepted as original.
+            </div>            
+          </div>
+          <div class="agree-item">
+            <i class="fa fa-check mr-2"></i>
+            <div class="agree-text">
+              We have verified that all signers have the right to have electronic signatures.
+            </div>            
+          </div>
+          <div class="agree-item">
+            <i class="fa fa-check mr-2"></i>
+            <div class="agree-text">
+              I agree in accordance with the Electronic Signature <b-button variant="link">Terms of Use</b-button> and Electronic Signature <b-button variant="link">Privacy Policy</b-button>.
+            </div>            
+          </div>
+        </div>
+        <div class="text-center">
+          <b-button variant="outline-primary" class="mr-3" v-on:click="cancelAgree()" >Cancel</b-button>
+          <button type="submit" class="btn btn-primary" v-on:click="agreeAll()">I agree and sign it</button>
+        </div>
+      </div>
+    </b-modal>
+    
+    <b-modal id="sign-waiting-modal" ref="sign-waiting-modal" @hide="closeWaitingModal"
+       hide-footer hide-header centered size="xl">
+      <div class="sign-waiting-modal">
+        <img src="img/icons/sand-clock.svg" />
+        <div class="title">
+          Please wait few minutes <br>
+          this process takes 1-3 minutes
+        </div>
+      </div>
+    </b-modal>
 
 
   <!-- MODAL -->
@@ -141,7 +196,7 @@
         </div>
         <!-- Tab Menu -->
         <div class="row mb-md-4 mb-2">
-          <div class="col-4 pr-0 pr-md-3">
+          <div v-if="current_action === 'signature'" class="col-4 pr-0 pr-md-3">
             <b-button
               class="stamp-tab-nav"
               :variant="config_val.navtab_index == 'Choose' ? 'primary' : 'outline-primary'"
@@ -155,7 +210,7 @@
               {{ $t('signature.modal.tab.choose') }}
             </b-button>
           </div>
-          <div class="col-4 px-2 px-md-3">
+          <div v-if="current_action === 'signature'" class="col-4 px-2 px-md-3">
             <b-button
               class="stamp-tab-nav"
               :variant="config_val.navtab_index == 'Draw' ? 'primary' : 'outline-primary'"
@@ -169,7 +224,7 @@
               {{ $t('signature.modal.tab.draw') }}
             </b-button>
           </div>
-          <div class="col-4 pl-0 pl-md-3">
+          <div v-if="current_action === 'stamp'" class="col-4 pl-0 pl-md-3">
             <b-button
               class="stamp-tab-nav"
               :variant="config_val.navtab_index == 'Upload' ? 'primary' : 'outline-primary'"
@@ -225,28 +280,6 @@
                     </p>
                   </div>
                 </div>
-                <!-- Input Initial -->
-                <div class="col-lg-3 col-md-4 col-12 pl-md-1 ">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      :class="{
-                        'form-control': true,
-                        'input-invalid': false,
-                        'input-valid': true
-                      }"
-                      id="initial"
-                      name="initial"
-                      v-model="form_data.initial"
-                      :placeholder="$t('signature.modal.placeholderInitials')"
-                      :maxlength="4"
-                      @changeValue="form_data.initial = $event"
-                    />
-                    <p  v-if="form_data.initial >= 25" class="validation-error text-left pl-2">
-                      <!-- Validation Response Error -->
-                    </p>
-                  </div>
-                </div>
               </div>
 
               <!-- Generated Signature & Initial -->
@@ -260,6 +293,7 @@
                   v-on:click="onSelectSignature(index)"
                 >
                   <div class="row">
+                    <div class="col-sm-2 col-12 m-auto"></div>
                     <div class="col-sm-8 col-12 m-auto">
                       <div class="d-flex flex-column justify-content-between px-md-2" style="width: inherit;">
                         <div class="signed-by">{{ $t('signature.modal.signby') }}</div>
@@ -277,23 +311,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-1 col-12 m-auto">
-                      <div class="right-border"></div>
-                    </div>
-                    <div class="col-sm-3 col-12 m-auto">
-                      <div class="signature-text pt-md-2">
-                        <GenerateSvg 
-                          ref="generatedInitial"
-                          :paramsData="{
-                            idData: index,
-                            type: 'Initial',
-                            text: form_data.initial,
-                            fontFace: item,
-                            lang: form_data.language == 'English' ? 'gb' : form_data.language == 'Korean' ? 'kr' : 'jp'
-                          }"
-                        />
-                      </div>
-                    </div>
+                    <div class="col-sm-2 col-12 m-auto"></div>
+                   
                   </div>
 
                   <div class="check-box" v-if="config_val.navtab_selected == index">
@@ -307,6 +326,7 @@
 
           <!-- Draw Signature & Initial -->
           <div v-else-if="config_val.navtab_index == 'Draw'" class="row mb-4">
+            <div class="col-lg-2 col-12 pr-lg-1 mb-3 mb-lg-0"></div>
             <div class="col-lg-8 col-12 pr-lg-1 mb-3 mb-lg-0">
               <div ref="container-for-signature" class="content-dash draw-signature">
                 <div
@@ -338,38 +358,7 @@
                 </div>
               </div>
             </div>
-            
-            <div class="col-lg col pl-lg-1 pb-2">
-              <div ref="container-for-initial" class="content-dash draw-initials">
-                <div
-                  class="draw-placeholder clickable-icon"
-                  v-if="!drawing_data.initial.drawable"
-                  v-on:click="drawing_data.initial.drawable=true"
-                >
-                  <img src="img/icons/pencil-draw.svg" />
-                  <div class="mt-3">{{ $t('signature.modal.drawInitials') }}</div>
-                </div>
-                <div class="canvas-container">
-                  <drawing-board 
-                    id="drawboard-ini"
-                    v-if="drawing_data.initial.drawable" 
-                    v-bind:key="drawing_data.initial.index" 
-                    :paramData="drawing_data.initial"
-                    :drawSize="{
-                      width: getContainerWidth('container-for-initial'),
-                      height: getContainerHeight('container-for-initial'),
-                    }"
-                    ref="drawboard-initial"
-                    class="draw-pan" 
-                  />
-                </div>
-                <div v-if="drawing_data.initial.drawable">
-                  <b-button variant="link" v-on:click="drawing_data.initial.drawable=false">
-                    <i class="fa fa-undo" /> {{ $t('signature.button.reset') }}
-                  </b-button>
-                </div>
-              </div>
-            </div>
+            <div class="col-lg-2 col-12 pr-lg-1 mb-3 mb-lg-0"></div>
           </div>
 
           <!-- Upload Stamp -->
@@ -398,9 +387,9 @@
           <hr />
 
           <div class="footer">
-            <div class="summary">
+            <!-- <div class="summary">
               {{ $t('signature.modal.tncSign') }}
-            </div>
+            </div> -->
             <div class="buttons">
               <b-button variant="link" v-on:click="hideSignInitialModal">
                 <span>
@@ -450,11 +439,15 @@ import {
   GET_RECIPIENTS
 } from "../../store/modules/document";
 import store from "../../store/store";
-import { GET_DOCS } from "../../store/actions.type";
+import { GET_DOCS, AUTH_LOADING } from "../../store/actions.type";
 import pdf from "vue-pdf";
 import draggable from "vuedraggable";
 import { addParamsToBlob, userListDefaultColors } from "../../helpers";
 import { prepareTools } from "../../helpers/prepareHandle";
+import { svgstyles } from '../../utils/svgstyle'
+import { getOutSide } from '../../utils/http'
+import JwtService from '../../mixins/jwt.service'
+import { signation } from '../../mixins/signation'
 import {
   prepareHandle,
   initialPrepare,
@@ -487,6 +480,7 @@ export default {
   computed: {
     ...mapGetters(["addDocument", [GET_DOCUMENT_REQUEST], "getRecipients", 'USER', 'SIGNATURES', 'loading', 'errors'])
   },
+  mixins: [signation, svgstyles],
   data() {
     return {
       documentList: [],
@@ -499,6 +493,7 @@ export default {
       currentPage: 0,
       pageCount: 0,
       src: null,
+      current_action: '',
       numPages: undefined,
       annotations: [],
       pageLoading: true,
@@ -509,7 +504,7 @@ export default {
       toggleDoc: true,
 
     // data sign
-
+      signature_img: '',
       user_selected_sign: 0,
       user_sign: "",
       form_data: {
@@ -596,21 +591,58 @@ export default {
     };
   },
   mounted() {
-    
-  let vm = this;
 
-  $(document).on('click', '.tool-sign', function(){
-      console.log("arrt", $(this).attr("data-tool"));
-      vm.showSignInitialModal();
+    let vm = this;
+    let backendUrl = `${config.BASE_URL}`;
+    let document_id = vm.$route.query.document_id;
+    let recipient_id = this.$route.query.recipient_id;
+    vm.pages = [];
+    vm.documentList = [];
+
+    $(document).on('click', '.tool-sign', function(){
+      let data_tool = JSON.parse($(this).attr("data-tool"))
+      console.log("arrt", $(this).attr("data-tool"), data_tool.tool);
+
+      if (data_tool.tool.name == "signature" || data_tool.tool.name == "stamp") {
+        vm.current_action = data_tool.tool.name;
+        vm.showSignInitialModal(data_tool.name);
+      } else {
+        let position = `position: absolute; z-index: 11; left: ${$(this).css("left")}; top: ${$(this).css("top")}; width: ${$(this).css("width")}; height: ${$(this).css("height")}; `
+        $(this).children().remove();
+        $(this).replaceWith(`<input type="text" id="input_value_${data_tool.annotation_id}"  placeholder="${data_tool.tool.label}" style="${position}" name="${data_tool.tool.name}">`)
+      }
       // this.$refs["create-signature-modal"].show();
       // $('#create-signature-modal').show()
     });
 
+     this.$root.$on('finishSign', () => {
+       let array_data = [];
+       let annotations_user = this.annotations.filter(v => v.actor_id === Number(recipient_id) && v.type_tools !== 'signature' && v.type_tools !== 'stamp' );
+       annotations_user && annotations_user.map((annotation, key) => { 
+         if (!$(`#input_value_${annotation.id}`).val()) {
+           vm.$toast.warn({
+              title: "Signature and input value requied",
+              message: "Please check signature input value!"
+            })
+            return;
+         } else {
+          array_data.push( {
+           annotation_id: annotation.id,
+           value: $(`#input_value_${annotation.id}`).val()
+          });
+         }
+       })
 
-    let backendUrl = `${config.BASE_URL}`;
-    let document_id = vm.$route.query.document_id;
-    vm.pages = [];
-    vm.documentList = [];
+
+
+       console.log("annotations_user", annotations_user);
+       console.log("1111111111", array_data);
+       
+      // this.openAgreeModal();
+    })
+
+
+  
 
     store
       .dispatch(GET_DOCS, document_id)
@@ -640,10 +672,10 @@ export default {
       }
     });
 
-    this.initialFunction();
+    this.initialFunction(recipient_id);
   },
   methods: {
-    initialFunction() {
+    initialFunction(recipient_id) {
       let vm = this;
       let backendUrl = `${config.BASE_URL}`;
       let document_id = vm.$route.query.document_id;
@@ -682,14 +714,14 @@ export default {
             
             vm.pageLoading = false;
             initialPrepare(vm.pages);
-            generalDefaultButton(vm.annotations, vm.items);
+            generalDefaultButton(vm.annotations, vm.items, recipient_id);
 
             // general drop
-            // prepareHandle(
-            //   vm.pages.map((v, key) => key),
-            //   this.recipientsList,
-            //   this.prepareEvent
-            // );
+            prepareHandle(
+              vm.pages.map((v, key) => key),
+              this.recipientsList,
+              this.prepareEvent
+            );
           }
         // console.log('vm.documentList.data', JSON.stringify( vm.documentList.data[0]))
         // console.log('vm.pages', vm.pages)
@@ -697,10 +729,10 @@ export default {
         });
       vm.$root.$on("bv::scrollspy::activate", vm.onActivate);
     },
-     showSignInitialModal () {
+     showSignInitialModal (user_name) {
       if (!this.form_data.signature_text) {
-        this.form_data.signature_text = this.USER.name
-        this.form_data.initial = this.USER.first_name.substring(0,1) + this.USER.last_name.substring(0,1)
+        this.form_data.signature_text = user_name
+        this.form_data.initial = user_name.substring(0,1);
       }
 
       this.$refs["create-signature-modal"].show();
@@ -712,6 +744,34 @@ export default {
     clearSForm() {
       Object.assign(this.$data, this.$options.data.apply(this))
     },
+    openAgreeModal() {
+      this.$refs["sign-agree-modal"].show();
+    },
+     closeWaitingModal() {
+      this.$router.push({ path: '/sign/complition' });
+    },
+    cancelAgree() {
+      this.$refs["sign-agree-modal"].hide();
+    },
+    agreeAll() {
+      this.$refs["sign-agree-modal"].hide();
+      this.$refs["sign-waiting-modal"].show();
+    },
+      finishSign() {
+       this.$root.$emit('finishSign')
+    },
+     onSelectSignature: function (index) {
+      this.config_val.navtab_selected = index
+    },
+     getDataURLSign: function () {
+      return this.$refs["drawboard-sign"].getDataURL()
+    },
+    getContainerWidth: function (cn) {
+      return parseInt(this.$refs[cn].clientWidth) - 50;
+    },
+    getContainerHeight: function (cn) {
+      return parseInt(this.$refs[cn].clientHeight) - 75;
+    },
      onSyncLanguage: function(e) {
       this.form_data.language = e
 
@@ -720,6 +780,34 @@ export default {
      onChangeName() {
       var matches = this.form_data.signature_text.match(/\b(\w)/g); // ['J','S','O','N']
       this.form_data.initial = matches ? matches.join('') : ''; // JSON
+    },
+      uploadFiles: function (s_image) {
+      var vm = this
+
+      store.dispatch(AUTH_LOADING, true)
+
+
+
+      // vm.uploadSignature(s_image)
+      //   .then(response => {
+      //     store.dispatch(SIGNATURE_UPLOAD, response.data.data)
+      //       .then(() => {
+      //         vm.$toast.success({
+      //           title: "Signature and Initial Uploaded",
+      //           message: "User's signature and initial have uploaded!"
+      //         });
+
+      //         vm.$refs["create-signature-modal"].hide();
+      //         store.dispatch(AUTH_LOADING, false)
+
+      //         vm.drawing_data.signature.drawable=false
+      //         vm.drawing_data.initial.drawable=false
+      //       })
+      //   })
+      //   .catch(errors => {
+      //     store.dispatch(AUTH_LOADING, false)
+      //     console.log(errors)
+      //   });
     },
      onCreateSignInitial: function () {
       var vm = this
@@ -740,48 +828,40 @@ export default {
               sSign = new XMLSerializer().serializeToString(svgNode);
 
           let pngBaseSign = this.svgToPng(sSign, 812, 412, 0)
+
+
           
-          /** Initial */
-          // append style in svg
-          let defsIni = vm.$refs["generatedInitial"][vm.config_val.navtab_selected].$refs["childSignSvg"].children["2"],
-              stylesIni = document.createElementNS("http://www.w3.org/2000/svg", "style"),
-              nodeIni = document.createTextNode(response);              
-          defsIni.appendChild(stylesIni);
-          stylesIni.appendChild(nodeIni);
+          console.log("1112222222", pngBaseSign);
+          
 
-          let svgNodeIni = vm.$refs["generatedInitial"][vm.config_val.navtab_selected].$refs.childSignSvg,
-              sInit = new XMLSerializer().serializeToString(svgNodeIni);
+          // pngBaseSign.then(resultSign => {
+          //   pngBaseInit.then(resultInit => {
+          //     vm.s_data = {
+          //       signature_type: vm.config_val.navtab_index,
+          //       initial: vm.form_data.initial,
+          //       signature_text: vm.form_data.signature_text,
+          //       font_face: vm.config_val.languages[vm.form_data.language][vm.config_val.navtab_selected],
+          //       font_size: vm.config_val.fontsize[vm.form_data.language][vm.config_val.navtab_selected],
+          //       language: vm.form_data.language,
+          //       uploaded_url: resultSign,
+          //       initial_uploaded_url: resultInit
+          //     }
 
-          let pngBaseInit = this.svgToPng(sInit, 412, 412, 0)
-
-          pngBaseSign.then(resultSign => {
-            pngBaseInit.then(resultInit => {
-              vm.s_data = {
-                signature_type: vm.config_val.navtab_index,
-                initial: vm.form_data.initial,
-                signature_text: vm.form_data.signature_text,
-                font_face: vm.config_val.languages[vm.form_data.language][vm.config_val.navtab_selected],
-                font_size: vm.config_val.fontsize[vm.form_data.language][vm.config_val.navtab_selected],
-                language: vm.form_data.language,
-                uploaded_url: resultSign,
-                initial_uploaded_url: resultInit
-              }
-
-              vm.createSignature(vm.s_data)
-                .then(response => {
-                  store.dispatch(SIGNATURE_CREATE, response.data.data)
-                    .then(() => {
-                      vm.$toast.success({
-                        title: "Signature and Initial Created",
-                        message: "User's signature and initial have created!"
-                      })
+          //     vm.createSignature(vm.s_data)
+          //       .then(response => {
+          //         store.dispatch(SIGNATURE_CREATE, response.data.data)
+          //           .then(() => {
+          //             vm.$toast.success({
+          //               title: "Signature and Initial Created",
+          //               message: "User's signature and initial have created!"
+          //             })
                 
-                      vm.$refs["create-signature-modal"].hide()
-                      store.dispatch(AUTH_LOADING, false)               
-                    })
-                })
-              })
-          })        
+          //             vm.$refs["create-signature-modal"].hide()
+          //             store.dispatch(AUTH_LOADING, false)               
+          //           })
+          //       })
+          //     })
+          // })        
       })
       .catch(errors => {
         store.dispatch(AUTH_LOADING, false)
@@ -794,7 +874,6 @@ export default {
 
       let s_image = {
         sign_image: vm.getDataURLSign(),
-        initial_image: vm.getDataURLInitial()
       }
       vm.uploadFiles(s_image)
     },
@@ -991,6 +1070,81 @@ export default {
     },
     removeRecipient(index) {
       this.recipients.splice(index, 1);
+    },
+     svgToPng: function (svgText, setWidth, setHeight, margin, fill) {
+      // convert an svg text to png using the browser
+      return new Promise(function(resolve, reject) {
+        try {
+          // can use the domUrl function from the browser
+          var domUrl = window.URL || window.webkitURL || window;
+          if (!domUrl) {
+            throw new Error("(browser doesnt support this)")
+          }
+          
+          // figure out the height and width from svg text
+          var match = svgText.match(/height=\"(\d+)/m);
+          var height = match && match[1] ? parseInt(match[1],10) : 412;
+          var match = svgText.match(/width=\"(\d+)/m);
+          var width = match && match[1] ? parseInt(match[1],10) : 412;
+          margin = margin || 0;
+
+          width = parseInt(setWidth);
+          height = parseInt(setHeight);
+          
+          // it needs a namespace
+          if (!svgText.match(/xmlns=\"/mi)){
+            svgText = svgText.replace ('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ') ;  
+          }
+          
+          // create a canvas element to pass through
+          var canvas = document.createElement("canvas");
+          canvas.width = width+margin*2;
+          canvas.height = height+margin*2;
+          var ctx = canvas.getContext("2d");        
+          
+          // make a blob from the svg
+          var svg = new Blob([svgText], {
+            type: "image/svg+xml;charset=utf-8"
+          });
+          
+          // create a dom object for that image
+          var url = domUrl.createObjectURL(svg);
+          
+          // create a new image to hold it the converted type
+          var img = new Image;
+          
+          // when the image is loaded we can get it as base64 url
+          img.onload = function() {
+            // draw it to the canvas
+            ctx.drawImage(this, margin, margin);
+            
+            // if it needs some styling, we need a new canvas
+            if (fill) {
+              var styled = document.createElement("canvas");
+              styled.width = canvas.width;
+              styled.height = canvas.height;
+              var styledCtx = styled.getContext("2d");
+              styledCtx.save();
+              styledCtx.fillStyle = fill;   
+              styledCtx.fillRect(0,0,canvas.width,canvas.height);
+              styledCtx.strokeRect(0,0,canvas.width,canvas.height);
+              styledCtx.restore();
+              styledCtx.drawImage (canvas, 0,0);
+              canvas = styled;
+            }
+            // we don't need the original any more
+            domUrl.revokeObjectURL(url);
+            // now we can resolve the promise, passing the base64 url
+            resolve(canvas.toDataURL());
+          };
+          
+          // load the image
+          img.src = url;
+          
+        } catch (err) {
+          reject('failed to convert svg to png ' + err);
+        }
+      })
     },
     prepareEvent(data, element) {
       const vm = this,

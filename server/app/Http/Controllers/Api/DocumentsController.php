@@ -99,7 +99,7 @@ class DocumentsController extends Controller
                         'creator_id' => $request->user()->id,
                         'doc_folder_id' => $request->doc_folder_id,
                         'action' => 'sign',
-                        'status' => 'draft',
+                        'status' => 'waitting',
                     ]);
                     // echo "Start <br/>"; echo '<pre>'; print_r($document);echo '</pre>';exit("End Data");
                     if($ext != "pdf")
@@ -166,7 +166,7 @@ class DocumentsController extends Controller
                         'creator_id' => $client->id,
                         'doc_folder_id' => $request->doc_folder_id,
                         'action' => 'sign',
-                        'status' => 'draft',
+                        'status' => 'waitting',
                     ]);
                     if(!empty($ext) && $ext != "pdf")
                         $document->document_file = $objPDF->convertFileToPDFAPI($document->document_file, $file_name);

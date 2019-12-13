@@ -117,7 +117,8 @@ class RecipientController extends Controller
             if(empty($recipient['uuid'])) {
                 if($recipient['action'] == 'copy' && $recipient['email'] != null) {
                     try {
-                        $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                        // $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                        $url = 'https://localhost:8080/#/sign/prepare/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
                         $info['url_document'] = $url;
                         Mail::to($recipient['email'] )->send(new SendMailRecipient($info));
                     } catch (\Throwable $th) {
@@ -128,7 +129,8 @@ class RecipientController extends Controller
                     }
                 }else{
                     try {
-                        $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                        // $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                        $url = 'https://localhost:8080/#/sign/prepare/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
                         $info['url_document'] = $url;
                         Mail::to($recipient['email'] )->send(new SendMailRecipient($info));
                         // break;

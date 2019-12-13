@@ -28,7 +28,7 @@
             <b-button variant="link" class="mr-1 mr-sm-4">Finish Later</b-button>
             <div class="d-inline-block position-relative">
               <b-button variant="other" class="px-4 px-sm-4" v-on:click="finishSign()">
-                {{ endFlag? 'Finish': 'Next' }}
+                {{'Finish' }}
               </b-button>
               <!-- <div class="doc-item-no" v-if="6-signStep > 0">
                 {{ 6-signStep }}
@@ -79,11 +79,12 @@ export default {
   },
   methods: {
     finishSign() {
-      if(this.endFlag){
-        this.$root.$emit('finishSign')
-      } else {
-        this.$root.$emit('nextSignEdit')
-      }
+       this.$root.$emit('finishSign')
+      // if(this.endFlag){
+      //   this.$root.$emit('finishSign')
+      // } else {
+      //   this.$root.$emit('nextSignEdit')
+      // }
 
     },
     gotoPage(page) {
