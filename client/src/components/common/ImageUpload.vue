@@ -12,8 +12,11 @@
         v-on:click="selectInitials"      
       >
         <img v-if="initials_file.length>0" :src="image" class="img-responsive" style="width: 170px; height: auto; max-height: inherit !important; border-radius: 20%" />
-        <img v-else :src="config_file.img || 'img/icons/upload.svg'" class="img-responsive" />
-        <div class="mt-3">{{ config_file.text || 'Upload Image' }}</div>
+       <div v-else>
+          <img :src="config_file.img || 'img/icons/upload.svg'" class="img-responsive" />
+          <div class="mt-3">{{ config_file.text || 'Upload Image' }}</div>
+       </div>
+       
       </div>
     </div>
     <div class="reset" v-if="initials_file.length>0">

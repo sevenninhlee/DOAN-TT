@@ -182,7 +182,63 @@
     </b-modal>
 
 
-  <!-- MODAL -->
+  <!-- MODAL STAMP -->
+    <b-modal 
+      id="create-stamp-modal" 
+      ref="create-stamp-modal" 
+      hide-footer size="xl" 
+      :no-close-on-backdrop="true" 
+      :no-close-on-esc="true"
+      :hide-header-close="true">
+      <div class="create-signature-modal">
+         <div class="title">
+          {{ $t('signature.modal.titleStamp') }}
+        </div>
+
+        <!-- Create Form -->
+        <div>
+          <!-- Upload Stamp -->
+          <div class="row mb-4">
+            <div class="col-lg-2 col-12 pr-lg-1 mb-3 mb-lg-0"></div>
+            <div class="col-lg-8 col-12 pr-lg-1 mb-3 mb-lg-0">
+              <ImageUpload 
+                v-bind:files="stamp_file" 
+                v-bind:config_file="({
+                  img: 'img/icons/upload.svg',
+                  text: $t('signature.modal.uploadStamp')
+                })"
+                v-on:toggle="toggleSignUpload($event)" 
+              />
+            </div>
+            <div class="col-lg-2 col-12 pr-lg-1 mb-3 mb-lg-0"></div>
+          </div>
+          <hr />
+
+          <div class="footer">
+            <div class="summary">
+              <!-- {{ $t('signature.modal.tncSign') }} -->
+            </div>
+            <div class="buttons">
+              <b-button variant="link" v-on:click="hideStampModal">
+                <span>
+                  <i class="fa fa-close"></i> {{ $t('signature.button.cancel') }}
+                </span>
+              </b-button>
+              <div>
+                <b-button variant="primary" v-on:click="onUploadSignInitial">{{ $t('signature.button.create') }}</b-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+    <!-- END MODAL -->
+
+
+
+
+
+  <!-- MODAL SIGNATURE -->
     <b-modal 
       id="create-signature-modal" 
       ref="create-signature-modal" 
@@ -196,7 +252,7 @@
         </div>
         <!-- Tab Menu -->
         <div class="row mb-md-4 mb-2">
-          <div v-if="current_action === 'signature'" class="col-4 pr-0 pr-md-3">
+          <div  class="col-4 pr-0 pr-md-3">
             <b-button
               class="stamp-tab-nav"
               :variant="config_val.navtab_index == 'Choose' ? 'primary' : 'outline-primary'"
@@ -210,7 +266,7 @@
               {{ $t('signature.modal.tab.choose') }}
             </b-button>
           </div>
-          <div v-if="current_action === 'signature'" class="col-4 px-2 px-md-3">
+          <div  class="col-4 px-2 px-md-3">
             <b-button
               class="stamp-tab-nav"
               :variant="config_val.navtab_index == 'Draw' ? 'primary' : 'outline-primary'"
@@ -222,20 +278,6 @@
               block
             >
               {{ $t('signature.modal.tab.draw') }}
-            </b-button>
-          </div>
-          <div v-if="current_action === 'stamp'" class="col-4 pl-0 pl-md-3">
-            <b-button
-              class="stamp-tab-nav"
-              :variant="config_val.navtab_index == 'Upload' ? 'primary' : 'outline-primary'"
-              v-on:click="() => {
-                config_val.navtab_index = 'Upload'
-                drawing_data.signature.drawable=false
-                drawing_data.initial.drawable=false
-              }" 
-              block
-            >
-              {{ $t('signature.modal.tab.upload') }}
             </b-button>
           </div>
         </div>
@@ -361,35 +403,12 @@
             <div class="col-lg-2 col-12 pr-lg-1 mb-3 mb-lg-0"></div>
           </div>
 
-          <!-- Upload Stamp -->
-          <div v-else class="row mb-4">
-            <div class="col-lg-8 col-12 pr-lg-1 mb-3 mb-lg-0">
-              <ImageUpload 
-                v-bind:files="signature_file" 
-                v-bind:config_file="({
-                  img: 'img/icons/upload.svg',
-                  text: $t('signature.modal.uploadSign')
-                })"
-                v-on:toggle="toggleSignUpload($event)" 
-              />
-            </div>
-            <div class="col-lg col pl-lg-1 pb-2">
-              <ImageUpload 
-                v-bind:files="initial_file" 
-                v-bind:config_file="({
-                  img: 'img/icons/upload.svg',
-                  text: $t('signature.modal.uploadInitials')
-                })" 
-                v-on:toggle="toggleInitialUpload($event)"
-              />
-            </div>
-          </div>
           <hr />
 
           <div class="footer">
-            <!-- <div class="summary">
-              {{ $t('signature.modal.tncSign') }}
-            </div> -->
+            <div class="summary">
+              <!-- {{ $t('signature.modal.tncSign') }} -->
+            </div>
             <div class="buttons">
               <b-button variant="link" v-on:click="hideSignInitialModal">
                 <span>
@@ -404,18 +423,13 @@
               <div v-else-if="config_val.navtab_index == 'Draw'">
                 <b-button variant="primary" v-on:click="onDrawSignInitial">{{ $t('signature.button.create') }}</b-button>
               </div>
-              <div v-else>
-                <b-button variant="primary" v-on:click="onUploadSignInitial">{{ $t('signature.button.create') }}</b-button>
-              </div>
-
             </div>
           </div>
-
         </div>
-
       </div>
     </b-modal>
     <!-- END MODAL -->
+
     </div>
   </div>
 </template>
@@ -526,20 +540,6 @@ export default {
         uploaded_url: '',
         initial_uploaded_url: ''
       },
-      generate_data: {
-        signature_type: 'Choose',
-        initial: '',
-        text: '',
-        font_face: '',
-        font_size: '',
-        language: 'English',
-        uploaded_url: ''
-      },
-      generate_img: {
-        signature: '',
-        initial: ''
-      },
-
       drawing_data: {
         signature: {
           name: 'signature',
@@ -553,7 +553,7 @@ export default {
         }
       },
 
-      signature_file: [],
+      stamp_file: [],
       initial_file: [],
       uploadSignComponent: [],
       uploadInitialComponent: [],
@@ -603,9 +603,10 @@ export default {
       let data_tool = JSON.parse($(this).attr("data-tool"))
       console.log("arrt", $(this).attr("data-tool"), data_tool.tool);
 
-      if (data_tool.tool.name == "signature" || data_tool.tool.name == "stamp") {
-        vm.current_action = data_tool.tool.name;
+      if (data_tool.tool.name == "signature") {
         vm.showSignInitialModal(data_tool.name);
+      } else if (data_tool.tool.name == "stamp") {
+        vm.showStempModal();
       } else {
         let position = `position: absolute; z-index: 11; left: ${$(this).css("left")}; top: ${$(this).css("top")}; width: ${$(this).css("width")}; height: ${$(this).css("height")}; `
         $(this).children().remove();
@@ -622,7 +623,7 @@ export default {
          if (!$(`#input_value_${annotation.id}`).val()) {
            vm.$toast.warn({
               title: "Signature and input value requied",
-              message: "Please check signature input value!"
+              message: "Please check signature and input value!"
             })
             return;
          } else {
@@ -737,9 +738,16 @@ export default {
 
       this.$refs["create-signature-modal"].show();
     },
+    showStempModal () {
+      this.$refs["create-stamp-modal"].show();
+    },
     hideSignInitialModal: function () {
       // this.clearSForm()
       this.$refs["create-signature-modal"].hide();
+    },
+    hideStampModal: function () {
+      // this.clearSForm()
+      this.$refs["create-stamp-modal"].hide();
     },
     clearSForm() {
       Object.assign(this.$data, this.$options.data.apply(this))
@@ -781,12 +789,38 @@ export default {
       var matches = this.form_data.signature_text.match(/\b(\w)/g); // ['J','S','O','N']
       this.form_data.initial = matches ? matches.join('') : ''; // JSON
     },
+     toggleSignUpload: function (e) {
+      if (!e) return
+
+      let reader = new FileReader();
+      reader.onload = e => this.uploadSignatureComponent = e.target.result
+      reader.readAsDataURL(e)
+    },
+      /** Draw Signature & Initial */
+    onDrawSignInitial: function () {
+      var vm = this
+
+      let s_image = {
+        sign_image: vm.getDataURLSign(),
+      }
+      vm.uploadFiles(s_image)
+    },
+      onUploadSignInitial: function () {
+      var vm = this
+
+      let s_image = {
+        sign_image: vm.uploadSignatureComponent,
+      }
+
+      vm.uploadFiles(s_image)
+    },
       uploadFiles: function (s_image) {
       var vm = this
 
       store.dispatch(AUTH_LOADING, true)
 
-
+      console.log("222222222", s_image );
+      
 
       // vm.uploadSignature(s_image)
       //   .then(response => {
@@ -868,15 +902,7 @@ export default {
         console.log(errors)
       })   
     },
-     /** Draw Signature & Initial */
-    onDrawSignInitial: function () {
-      var vm = this
-
-      let s_image = {
-        sign_image: vm.getDataURLSign(),
-      }
-      vm.uploadFiles(s_image)
-    },
+      
     deleteHandle(docId, imgUrl) {
       let numPage = this.numpage(imgUrl);
       if(numPage) {
