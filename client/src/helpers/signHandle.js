@@ -243,6 +243,14 @@ export function generalDefaultButton2(annotations, recipientsList, callback) {
   });
 }
 
+export function addStamp(annotation) {
+  $(document).ready(function () {
+    let element_style = `position: absolute; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 11; width: ${annotation.type_tools == "signature" ? "150"  : "80"}px; height: 80px;`;
+    $(`#annotation_tool_id_${annotation.id}`).children().remove();
+    $(`#annotation_tool_id_${annotation.id}`).replaceWith(`<img src="${annotation.image_url}" style='${element_style}' class='' id="annotation_tool_id_${annotation.id}"  alt="sign" >`)
+  })
+}
+
 export function generalDefaultButton(annotations, recipientsList, recipient_id) {
   $(document).ready(function () {
     console.log('annotations', JSON.parse(JSON.stringify( annotations)) )

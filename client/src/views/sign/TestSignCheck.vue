@@ -205,15 +205,10 @@ export default {
   },
   mounted() {
 
-    // $(document).on('click', '.tool-sign', function(){
-    //   console.log("arrt", $(this).attr("data-tool"));
-      
-    // });
-
-
     let vm = this;
     let backendUrl = `${config.BASE_URL}`;
     let document_id = vm.$route.query.document_id;
+    let recipient_id = this.$route.query.recipient_id;
     vm.pages = [];
     vm.documentList = [];
 
@@ -245,10 +240,10 @@ export default {
       }
     });
 
-    this.initialFunction();
+    this.initialFunction(recipient_id);
   },
   methods: {
-    initialFunction() {
+    initialFunction(recipient_id) {
       let vm = this;
       let backendUrl = `${config.BASE_URL}`;
       let document_id = vm.$route.query.document_id;
@@ -285,14 +280,14 @@ export default {
             });
             vm.pageLoading = false;
             initialPrepare(vm.pages);
-            generalDefaultButton(vm.annotations, vm.items);
+            generalDefaultButton(vm.annotations, vm.items, recipient_id);
 
             // general drop
-            // prepareHandle(
-            //   vm.pages.map((v, key) => key),
-            //   this.recipientsList,
-            //   this.prepareEvent
-            // );
+            prepareHandle(
+              vm.pages.map((v, key) => key),
+              this.recipientsList,
+              this.prepareEvent
+            );
           }
         // console.log('vm.documentList.data',  JSON.stringify(  vm.documentList.data[0].images))
         // console.log('vm.pages',  JSON.stringify(  vm.pages))

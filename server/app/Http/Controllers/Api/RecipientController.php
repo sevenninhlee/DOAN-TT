@@ -184,7 +184,7 @@ class RecipientController extends Controller
         ->withHeader('Authorization: Bearer '.$request['access_token'])
         ->get();
 
-        echo "Start <br/>"; echo '<pre>'; print_r($response);echo '</pre>';exit("End Data");
+        // echo "Start <br/>"; echo '<pre>'; print_r($response);echo '</pre>';exit("End Data");
     }
 
 }

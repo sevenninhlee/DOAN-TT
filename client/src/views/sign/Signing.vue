@@ -117,14 +117,6 @@
             </div>
           </div>
           <div class="text-center">
-             <img
-                class="navbar-brand-full"
-                v-if="{ signature_img }"
-                :src="`${signature_img}`"
-                width="125"
-                height="41"
-                alt="Coffee Sign"
-              />
             <b-button variant="link" class="mr-0 mr-sm-5" >Finish later</b-button>
             <b-button variant="other" class="px-2 px-sm-5" v-on:click="finishSign()" >Finish</b-button>
           </div>
@@ -461,7 +453,7 @@ import { prepareTools } from "../../helpers/prepareHandle";
 import { svgstyles } from '../../utils/svgstyle'
 import { getOutSide } from '../../utils/http'
 import JwtService from '../../mixins/jwt.service'
-import { signation } from '../../mixins/signation'
+import { signing } from '../../mixins/signing'
 import {
   prepareHandle,
   initialPrepare,
@@ -474,6 +466,7 @@ import {
 } from "../../helpers/prepareHandle";
 import {
   generalDefaultButton,
+  addStamp
 } from "../../helpers/signHandle";
 import config from "../../config/config";
 import { EventBus } from "../../config/event-bus";
@@ -494,7 +487,7 @@ export default {
   computed: {
     ...mapGetters(["addDocument", [GET_DOCUMENT_REQUEST], "getRecipients", 'USER', 'SIGNATURES', 'loading', 'errors'])
   },
-  mixins: [signation, svgstyles],
+  mixins: [signing, svgstyles],
   data() {
     return {
       documentList: [],
@@ -519,6 +512,7 @@ export default {
 
     // data sign
       signature_img: '',
+      annotation_id: '',
       user_selected_sign: 0,
       user_sign: "",
       form_data: {
@@ -604,9 +598,9 @@ export default {
       console.log("arrt", $(this).attr("data-tool"), data_tool.tool);
 
       if (data_tool.tool.name == "signature") {
-        vm.showSignInitialModal(data_tool.name);
+        vm.showSignInitialModal(data_tool.name, data_tool.annotation_id);
       } else if (data_tool.tool.name == "stamp") {
-        vm.showStempModal();
+        vm.showStempModal(data_tool.annotation_id);
       } else {
         let position = `position: absolute; z-index: 11; left: ${$(this).css("left")}; top: ${$(this).css("top")}; width: ${$(this).css("width")}; height: ${$(this).css("height")}; `
         $(this).children().remove();
@@ -730,7 +724,8 @@ export default {
         });
       vm.$root.$on("bv::scrollspy::activate", vm.onActivate);
     },
-     showSignInitialModal (user_name) {
+     showSignInitialModal (user_name, annotation_id) {
+      this.annotation_id = annotation_id;
       if (!this.form_data.signature_text) {
         this.form_data.signature_text = user_name
         this.form_data.initial = user_name.substring(0,1);
@@ -738,7 +733,8 @@ export default {
 
       this.$refs["create-signature-modal"].show();
     },
-    showStempModal () {
+    showStempModal (annotation_id) {
+      this.annotation_id = annotation_id;
       this.$refs["create-stamp-modal"].show();
     },
     hideSignInitialModal: function () {
@@ -802,6 +798,7 @@ export default {
 
       let s_image = {
         sign_image: vm.getDataURLSign(),
+        annotation_id: vm.annotation_id
       }
       vm.uploadFiles(s_image)
     },
@@ -810,38 +807,34 @@ export default {
 
       let s_image = {
         sign_image: vm.uploadSignatureComponent,
+        annotation_id: vm.annotation_id
       }
 
       vm.uploadFiles(s_image)
     },
       uploadFiles: function (s_image) {
       var vm = this
-
       store.dispatch(AUTH_LOADING, true)
 
       console.log("222222222", s_image );
-      
 
-      // vm.uploadSignature(s_image)
-      //   .then(response => {
-      //     store.dispatch(SIGNATURE_UPLOAD, response.data.data)
-      //       .then(() => {
-      //         vm.$toast.success({
-      //           title: "Signature and Initial Uploaded",
-      //           message: "User's signature and initial have uploaded!"
-      //         });
+      vm.uploadStamp(s_image)
+        .then(response => {
 
-      //         vm.$refs["create-signature-modal"].hide();
-      //         store.dispatch(AUTH_LOADING, false)
+        let annotation = response.data.data;
+        addStamp(annotation);
 
-      //         vm.drawing_data.signature.drawable=false
-      //         vm.drawing_data.initial.drawable=false
-      //       })
-      //   })
-      //   .catch(errors => {
-      //     store.dispatch(AUTH_LOADING, false)
-      //     console.log(errors)
-      //   });
+        vm.$refs["create-signature-modal"].hide();
+        this.$refs["create-stamp-modal"].hide();
+        store.dispatch(AUTH_LOADING, false)
+        vm.drawing_data.signature.drawable=false
+        vm.drawing_data.initial.drawable=false
+        
+      })
+      .catch(errors => {
+        store.dispatch(AUTH_LOADING, false)
+        console.log(errors)
+      });
     },
      onCreateSignInitial: function () {
       var vm = this
@@ -864,38 +857,25 @@ export default {
           let pngBaseSign = this.svgToPng(sSign, 812, 412, 0)
 
 
-          
-          console.log("1112222222", pngBaseSign);
-          
+          pngBaseSign.then(resultSign => {
+              vm.s_data = {
+                signature_type: vm.config_val.navtab_index,
+                initial: vm.form_data.initial,
+                signature_text: vm.form_data.signature_text,
+                font_face: vm.config_val.languages[vm.form_data.language][vm.config_val.navtab_selected],
+                font_size: vm.config_val.fontsize[vm.form_data.language][vm.config_val.navtab_selected],
+                language: vm.form_data.language,
+                uploaded_url: resultSign,
+              }
 
-          // pngBaseSign.then(resultSign => {
-          //   pngBaseInit.then(resultInit => {
-          //     vm.s_data = {
-          //       signature_type: vm.config_val.navtab_index,
-          //       initial: vm.form_data.initial,
-          //       signature_text: vm.form_data.signature_text,
-          //       font_face: vm.config_val.languages[vm.form_data.language][vm.config_val.navtab_selected],
-          //       font_size: vm.config_val.fontsize[vm.form_data.language][vm.config_val.navtab_selected],
-          //       language: vm.form_data.language,
-          //       uploaded_url: resultSign,
-          //       initial_uploaded_url: resultInit
-          //     }
-
-          //     vm.createSignature(vm.s_data)
-          //       .then(response => {
-          //         store.dispatch(SIGNATURE_CREATE, response.data.data)
-          //           .then(() => {
-          //             vm.$toast.success({
-          //               title: "Signature and Initial Created",
-          //               message: "User's signature and initial have created!"
-          //             })
-                
-          //             vm.$refs["create-signature-modal"].hide()
-          //             store.dispatch(AUTH_LOADING, false)               
-          //           })
-          //       })
-          //     })
-          // })        
+              vm.createSignature(vm.s_data)
+                .then(response => {
+                  let annotation = response.data.data;
+                  addStamp(annotation);
+                  vm.$refs["create-signature-modal"].hide()
+                  store.dispatch(AUTH_LOADING, false)   
+                })
+          })        
       })
       .catch(errors => {
         store.dispatch(AUTH_LOADING, false)

@@ -170,3 +170,14 @@ Route::prefix('signs-stamps')->middleware('auth:api')->group(function () {
     Route::post('/signs-upload', 'Api\SignaturesController@upload');
     Route::get('/signs-default/{id}', 'Api\SignaturesController@setDefault');
 });
+
+/** Signing Routes */
+Route::prefix('signing')->group(function () {
+     /** Signatures */
+    Route::post('/signs', 'Api\SigningController@store');
+
+    /** Stamps */
+    Route::post('/stamp-upload', 'Api\SigningController@upload');
+
+});
+
