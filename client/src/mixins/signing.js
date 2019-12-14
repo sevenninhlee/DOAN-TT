@@ -7,6 +7,8 @@ export const signing = {
       return get('signing/signs')
     },
     createSignature: function(data) {
+      console.log('sfsd');
+      
       return post('signing/signs', data)
     },
     uploadStamp: function(data) {

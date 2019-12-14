@@ -613,22 +613,22 @@ export default {
      this.$root.$on('finishSign', () => {
        let array_data = [];
        let annotations_user = this.annotations.filter(v => v.actor_id === Number(recipient_id) && v.type_tools !== 'signature' && v.type_tools !== 'stamp' );
-       annotations_user && annotations_user.map((annotation, key) => { 
-         if (!$(`#input_value_${annotation.id}`).val()) {
+       
+       for (let i = 0; i < annotations_user.length; i++) {
+         const element = annotations_user[i];
+         if (!$(`#input_value_${element.id}`).val()) {
            vm.$toast.warn({
               title: "Signature and input value requied",
               message: "Please check signature and input value!"
             })
-            return;
+            break;
          } else {
           array_data.push( {
-           annotation_id: annotation.id,
-           value: $(`#input_value_${annotation.id}`).val()
+           annotation_id: element.id,
+           value: $(`#input_value_${element.id}`).val()
           });
          }
-       })
-
-
+       }
 
        console.log("annotations_user", annotations_user);
        console.log("1111111111", array_data);
@@ -816,8 +816,6 @@ export default {
       var vm = this
       store.dispatch(AUTH_LOADING, true)
 
-      console.log("222222222", s_image );
-
       vm.uploadStamp(s_image)
         .then(response => {
 
@@ -857,18 +855,14 @@ export default {
           let pngBaseSign = this.svgToPng(sSign, 812, 412, 0)
 
 
+
           pngBaseSign.then(resultSign => {
-              vm.s_data = {
-                signature_type: vm.config_val.navtab_index,
-                initial: vm.form_data.initial,
-                signature_text: vm.form_data.signature_text,
-                font_face: vm.config_val.languages[vm.form_data.language][vm.config_val.navtab_selected],
-                font_size: vm.config_val.fontsize[vm.form_data.language][vm.config_val.navtab_selected],
-                language: vm.form_data.language,
+              let s_data = {
+                annotation_id: vm.annotation_id,
                 uploaded_url: resultSign,
               }
 
-              vm.createSignature(vm.s_data)
+              vm.createSignature(s_data)
                 .then(response => {
                   let annotation = response.data.data;
                   addStamp(annotation);

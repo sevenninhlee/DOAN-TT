@@ -24,12 +24,9 @@ class SigningController extends Controller
     {
       $signBase = $request->sign_image;
       if (false === $signBase) {
-        // throw new Zend_Filter_Exception('Can\'t load image: ' . $imageBase);
-        if ($validator->fails()) {
-          return response()->json([
-            'errors' => 'Can\'t load image: '
-          ], 422);
-        }
+        return response()->json([
+          'errors' => 'Can\'t load image: '
+        ], 422);
       }
 
       // Define Location and Filename
@@ -64,16 +61,17 @@ class SigningController extends Controller
 
     public function store(Request $request)
     {
-      $validator = Validator::make($request->all(), [
-        'signature_type' => 'required|string',
-        'signature_text' => 'required|string',
-        'font_face' => 'required|string',
-        'font_size' => 'required|string'
-      ]);
-
-      if ($validator->fails()) {
+      // $validator = Validator::make($request->all(), [
+      //   'signature_type' => 'required|string',
+      //   'signature_text' => 'required|string',
+      //   'font_face' => 'required|string',
+      //   'font_size' => 'required|string'
+      // ]);
+      $signBase = $request->uploaded_url;
+      
+      if (false === $signBase) {
         return response()->json([
-          'errors' => $validator->errors()->all()
+          'errors' => 'Can\'t load image: '
         ], 422);
       }
 
@@ -81,15 +79,15 @@ class SigningController extends Controller
       $destinationPath = storage_path().'/app/public/signstamps/';
       $newWidth = 100;
       $targetFile = $destinationPath;
-      $signBase = $request->uploaded_url;
 
       // Uploading to Storage
       $signResized = $this->resize(($newWidth + 50),  $targetFile, $signBase, 'sign');
+      // echo "Start <br/>"; echo '<pre>'; print_r($signResized);echo '</pre>';exit("End Data");           
      
         /** Update Annotation */
         $annotation = Annotation::find($request->annotation_id);
         if ($annotation == null) {
-            return response(null, 404);
+            return response(null, 400);
         }
 
         $annotation->image_url = 'signstamps/' . $signResized;
