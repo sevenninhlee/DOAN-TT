@@ -5,7 +5,7 @@
       <hr />
       <FileUpload :files="files" @addFiles="addFiles" @isData="isData" />
       <div class="d-flex justify-content-end pt-4 flex-wrap align-items-center">
-        <b-form-checkbox class="m-1">{{ $t("docsign.document.checkbox") }}</b-form-checkbox>
+        <!-- <b-form-checkbox class="m-1">{{ $t("docsign.document.checkbox") }}</b-form-checkbox> -->
         <button
           class="btn btn-primary min-width-124px m-1"
           v-on:click="moveNextPage()"

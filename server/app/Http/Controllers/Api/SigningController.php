@@ -161,7 +161,7 @@ class SigningController extends Controller
             break;
 
         default: 
-            throw new Exception('Unknown image type.');
+            return response(null, 400);
         }
     
         $img = $image_create_func($originalFile);
