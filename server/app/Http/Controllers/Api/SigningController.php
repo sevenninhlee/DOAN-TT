@@ -58,15 +58,46 @@ class SigningController extends Controller
 
     }
 
+    public function storeValue(Request $request)
+    {
+      $sign_value = $request->all();
+      
+      if (false === $sign_value) {
+        return response()->json([
+          'errors' => 'Can\'t load image: '
+        ], 422);
+      }
+
+      echo "Start <br/>"; echo '<pre>'; print_r($sign_value);echo '</pre>';exit("End Data");           
+
+      // Defina Location and Filename
+      $destinationPath = storage_path().'/app/public/signstamps/';
+      $newWidth = 100;
+      $targetFile = $destinationPath;
+
+      // Uploading to Storage
+      $signResized = $this->resize(($newWidth + 50),  $targetFile, $signBase, 'sign');
+     
+        /** Update Annotation */
+        $annotation = Annotation::find($request->annotation_id);
+        if ($annotation == null) {
+            return response(null, 400);
+        }
+
+        $annotation->image_url = 'signstamps/' . $signResized;
+
+        $annotation->save();
+
+        $url = env('APP_URL', 'http://localhost:8000') . "/images/" . $annotation->image_url;
+        $annotation->image_url = $url;
+        $response = $this->successfulMessage(201, 'Successfully updated', true, 1, $annotation);
+
+        return response(json_encode($response));
+
+    }
 
     public function store(Request $request)
     {
-      // $validator = Validator::make($request->all(), [
-      //   'signature_type' => 'required|string',
-      //   'signature_text' => 'required|string',
-      //   'font_face' => 'required|string',
-      //   'font_size' => 'required|string'
-      // ]);
       $signBase = $request->uploaded_url;
       
       if (false === $signBase) {
@@ -82,8 +113,7 @@ class SigningController extends Controller
 
       // Uploading to Storage
       $signResized = $this->resize(($newWidth + 50),  $targetFile, $signBase, 'sign');
-      // echo "Start <br/>"; echo '<pre>'; print_r($signResized);echo '</pre>';exit("End Data");           
-     
+
         /** Update Annotation */
         $annotation = Annotation::find($request->annotation_id);
         if ($annotation == null) {
@@ -96,8 +126,6 @@ class SigningController extends Controller
 
         $url = env('APP_URL', 'http://localhost:8000') . "/images/" . $annotation->image_url;
         $annotation->image_url = $url;
-        //   echo "Start <br/>"; echo '<pre>'; print_r($url);echo '</pre>';exit("End Data");
-
         $response = $this->successfulMessage(201, 'Successfully updated', true, 1, $annotation);
 
         return response(json_encode($response));

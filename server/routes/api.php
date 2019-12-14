@@ -175,6 +175,7 @@ Route::prefix('signs-stamps')->middleware('auth:api')->group(function () {
 Route::prefix('signing')->group(function () {
      /** Signatures */
     Route::post('/signs', 'Api\SigningController@store');
+    Route::post('/signs-value', 'Api\SigningController@storeValue');
 
     /** Stamps */
     Route::post('/stamp-upload', 'Api\SigningController@upload');

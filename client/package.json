@@ -3,17 +3,9 @@
   "version": "2.0.3",
   "description": "Coffe Sign",
   "author": {
-    "name": "JPerfectSolution",
-    "url": "http://holeczek.pl",
-    "github": "https://github.com/mrholek",
-    "twitter": "https://twitter.com/lukaszholeczek"
+    "name": "NinhLee",
+    "github": "https://github.com/sevenninhlee"
   },
-  "contributors": [
-    {
-      "name": "Andrzej Kopański",
-      "url": "https://github.com/xidedix"
-    }
-  ],
   "homepage": "http://coreui.io",
   "copyright": "Copyright 2019 JPerfectSolution",
   "license": "https://coreui.io/pro/license/",

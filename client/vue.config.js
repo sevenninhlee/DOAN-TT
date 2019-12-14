@@ -15,15 +15,15 @@ const port = 8080
 
 module.exports = {
   lintOnSave: false,
-  baseUrl: `https://${host}:${port}/`,
+  baseUrl: `http://${host}:${port}/`,
 
   devServer: {
-    https: true,
+    https: false,
     port,
     host,
     hotOnly: true,
     // disableHostCheck: true,
-    clientLogLevel: 'warning',
+    // clientLogLevel: 'warning',
     inline: true,
     headers: {
       'Access-Control-Allow-Origin': '*',

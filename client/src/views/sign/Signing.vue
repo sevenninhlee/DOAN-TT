@@ -616,22 +616,43 @@ export default {
        
        for (let i = 0; i < annotations_user.length; i++) {
          const element = annotations_user[i];
-         if (!$(`#input_value_${element.id}`).val()) {
-           vm.$toast.warn({
-              title: "Signature and input value requied",
-              message: "Please check signature and input value!"
-            })
-            break;
-         } else {
-          array_data.push( {
+         if ($(`#input_value_${element.id}`).val()) {
+           array_data.push( {
            annotation_id: element.id,
            value: $(`#input_value_${element.id}`).val()
           });
-         }
+        }
        }
 
-       console.log("annotations_user", annotations_user);
+      console.log("annotations_user", annotations_user);
        console.log("1111111111", array_data);
+
+      if (array_data.length === annotations_user.length) {
+          vm.createSignValue(array_data)
+          .then(response => {
+
+          let res = response.data.data;
+
+          console.log("2222222222222", res);
+          
+
+          // vm.$refs["create-signature-modal"].hide();
+          // this.$refs["create-stamp-modal"].hide();
+          // store.dispatch(AUTH_LOADING, false)
+          // vm.drawing_data.signature.drawable=false
+          // vm.drawing_data.initial.drawable=false
+          
+        })
+        .catch(errors => {
+          console.log(errors)
+        });
+
+      } else {
+         vm.$toast.warn({
+          title: "Signature and input value requied",
+          message: "Please check signature and input value!"
+        })
+      }
        
       // this.openAgreeModal();
     })
