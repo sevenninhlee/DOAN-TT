@@ -5,11 +5,11 @@
         <AppHeader class="sign-header">
           <AppLogoDark/>
           <div class="doc-timeline">
-            <div class="timeline-item">
+            <!-- <div class="timeline-item">
               <i :class="getStyle(0)" />
               <span class="timeline-title" :class="getTextStyle(0)">Check the document</span>
               <div class="header-radio-dashline"></div>
-            </div>
+            </div> -->
             <div class="timeline-item">
               <i :class="getStyle(1)" />
               <span class="timeline-title" :class="getTextStyle(1)">Signing</span>
@@ -114,7 +114,7 @@ export default {
       } else if ( this.$router.history.current.path == "/sign/complition" ) {
         this.currentStepNo = 2;
       } else {
-        this.currentStepNo = 0;
+        this.currentStepNo = 1;
       }
     }
   },

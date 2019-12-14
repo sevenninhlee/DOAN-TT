@@ -60,7 +60,8 @@ class SigningController extends Controller
 
     public function storeValue(Request $request)
     {
-      $sign_value = $request->all();
+      $sign_value = $request->all() ;
+
       
       if (false === $sign_value) {
         return response()->json([
@@ -68,29 +69,18 @@ class SigningController extends Controller
         ], 422);
       }
 
-      echo "Start <br/>"; echo '<pre>'; print_r($sign_value);echo '</pre>';exit("End Data");           
-
-      // Defina Location and Filename
-      $destinationPath = storage_path().'/app/public/signstamps/';
-      $newWidth = 100;
-      $targetFile = $destinationPath;
-
-      // Uploading to Storage
-      $signResized = $this->resize(($newWidth + 50),  $targetFile, $signBase, 'sign');
-     
-        /** Update Annotation */
-        $annotation = Annotation::find($request->annotation_id);
+       foreach ($sign_value as $value) {
+        $annotation = Annotation::find($value['annotation_id']);
         if ($annotation == null) {
             return response(null, 400);
         }
-
-        $annotation->image_url = 'signstamps/' . $signResized;
-
+        $annotation->value = $value['value'];
         $annotation->save();
-
-        $url = env('APP_URL', 'http://localhost:8000') . "/images/" . $annotation->image_url;
-        $annotation->image_url = $url;
-        $response = $this->successfulMessage(201, 'Successfully updated', true, 1, $annotation);
+       }
+        
+      //  echo "Start <br/>"; echo '<pre>'; print_r($value['annotation_id']);echo '</pre>';exit("End Data");        
+        
+        $response = $this->successfulMessage(201, 'Successfully updated', true, 1, []);
 
         return response(json_encode($response));
 

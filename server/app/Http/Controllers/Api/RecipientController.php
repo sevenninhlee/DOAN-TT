@@ -15,7 +15,7 @@ use App\Mail\SendMailRecipient;
 use Mail;
 use Request as rq;
 use Ixudra\Curl\Facades\Curl;
-
+use App\StatusSign;
 
 
 class RecipientController extends Controller
@@ -115,25 +115,23 @@ class RecipientController extends Controller
         // $info['document_path'] = storage_path('uploads/documents/sample1567588556.pdf');
         foreach ($recipients as $key => $recipient) {
             if(empty($recipient['uuid'])) {
-                if($recipient['action'] == 'copy' && $recipient['email'] != null) {
+                if($recipient['action'] != 'copy' && $recipient['email'] != null) {
                     try {
                         // $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
-                        $url = 'https://localhost:8080/#/sign/prepare/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                        //add StatusSign
+                        // $st_sign = new StatusSign();
+                        // $st_sign->document_id = $data['document_id'];
+                        // $st_sign->recip_id = $recipient['id'];
+                        // $st_sign->status = 0;
+                        // $st_sign->save();
+
+                        StatusSign::updateOrCreate(
+                            ['document_id' => $data['document_id'], 'recip_id' => $recipient['id'], 'status' => 0]
+                        );
+
+                        $url = env('CLIENT_URL', 'http://localhost:8080/#').'/sign/signing/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
                         $info['url_document'] = $url;
                         Mail::to($recipient['email'] )->send(new SendMailRecipient($info));
-                    } catch (\Throwable $th) {
-                        return response()->json([
-                            'status' => false,
-                            'msg' => $th
-                        ]);
-                    }
-                }else{
-                    try {
-                        // $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
-                        $url = 'https://localhost:8080/#/sign/prepare/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
-                        $info['url_document'] = $url;
-                        Mail::to($recipient['email'] )->send(new SendMailRecipient($info));
-                        // break;
                     } catch (\Throwable $th) {
                         return response()->json([
                             'status' => false,
@@ -141,6 +139,20 @@ class RecipientController extends Controller
                         ]);
                     }
                 }
+                // else{
+                //     try {
+                //         // $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                //         $url = env('CLIENT_URL', 'http://localhost:8080/#').'/sign/prepare/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
+                //         $info['url_document'] = $url;
+                //         Mail::to($recipient['email'] )->send(new SendMailRecipient($info));
+                //         // break;
+                //     } catch (\Throwable $th) {
+                //         return response()->json([
+                //             'status' => false,
+                //             'msg' => $th
+                //         ]);
+                //     }
+                // }
             } else {
                 $uuid = $recipient['uuid'];
                 $response = Curl::to('https://kapi.kakao.com/v1/api/talk/friends/message/default/send')

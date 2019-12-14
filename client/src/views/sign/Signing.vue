@@ -625,13 +625,16 @@ export default {
        }
 
       console.log("annotations_user", annotations_user);
-       console.log("1111111111", array_data);
-
       if (array_data.length === annotations_user.length) {
           vm.createSignValue(array_data)
           .then(response => {
 
           let res = response.data.data;
+          this.openAgreeModal();
+
+          // if (res.success) {
+          //   this.openAgreeModal();
+          // }
 
           console.log("2222222222222", res);
           
@@ -654,7 +657,7 @@ export default {
         })
       }
        
-      // this.openAgreeModal();
+      
     })
 
 
@@ -781,6 +784,9 @@ export default {
     agreeAll() {
       this.$refs["sign-agree-modal"].hide();
       this.$refs["sign-waiting-modal"].show();
+      setTimeout(() => {
+        this.$refs["sign-waiting-modal"].hide();
+      }, 3000);
     },
       finishSign() {
        this.$root.$emit('finishSign')
