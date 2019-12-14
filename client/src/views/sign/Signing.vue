@@ -611,57 +611,51 @@ export default {
     });
 
      this.$root.$on('finishSign', () => {
-       let array_data = [];
-       let annotations_user = this.annotations.filter(v => v.actor_id === Number(recipient_id) && v.type_tools !== 'signature' && v.type_tools !== 'stamp' );
-       
-       for (let i = 0; i < annotations_user.length; i++) {
-         const element = annotations_user[i];
-         if ($(`#input_value_${element.id}`).val()) {
-           array_data.push( {
-           annotation_id: element.id,
-           value: $(`#input_value_${element.id}`).val()
-          });
-        }
-       }
-
-      console.log("annotations_user", annotations_user);
-      if (array_data.length === annotations_user.length) {
-          vm.createSignValue(array_data)
-          .then(response => {
-
-          let res = response.data.data;
-          this.openAgreeModal();
-
-          // if (res.success) {
-          //   this.openAgreeModal();
-          // }
-
-          console.log("2222222222222", res);
-          
-
-          // vm.$refs["create-signature-modal"].hide();
-          // this.$refs["create-stamp-modal"].hide();
-          // store.dispatch(AUTH_LOADING, false)
-          // vm.drawing_data.signature.drawable=false
-          // vm.drawing_data.initial.drawable=false
-          
-        })
-        .catch(errors => {
-          console.log(errors)
-        });
-
-      } else {
-         vm.$toast.warn({
-          title: "Signature and input value requied",
-          message: "Please check signature and input value!"
-        })
-      }
-       
-      
+          this.openAgreeModal(); 
     })
 
+    this.$root.$on('Agreement', () => {
+          
+      this.$refs["sign-agree-modal"].hide();
+      this.$refs["sign-waiting-modal"].show();
+      store.dispatch(AUTH_LOADING, true);
 
-  
+      let array_data = [];
+        let annotations_user = this.annotations.filter(v => v.actor_id === Number(recipient_id) && v.type_tools !== 'signature' && v.type_tools !== 'stamp' );
+        
+        for (let i = 0; i < annotations_user.length; i++) {
+          const element = annotations_user[i];
+          if ($(`#input_value_${element.id}`).val()) {
+            array_data.push( {
+            annotation_id: element.id,
+            value: $(`#input_value_${element.id}`).val()
+            });
+          }
+        }
+
+        console.log("annotations_user", annotations_user);
+        
+        if (array_data.length === annotations_user.length) {
+            vm.createSignValue(array_data)
+            .then(response => {
+              store.dispatch(AUTH_LOADING, false)
+              setTimeout(() => {
+                this.$refs["sign-waiting-modal"].hide();
+              }, 3000);
+            
+          })
+          .catch(errors => {
+            console.log(errors)
+          });
+
+        } else {
+          vm.$toast.warn({
+            title: "Signature and input value requied",
+            message: "Please check signature and input value!"
+          })
+        }
+ 
+    })
 
     store
       .dispatch(GET_DOCS, document_id)
@@ -782,11 +776,7 @@ export default {
       this.$refs["sign-agree-modal"].hide();
     },
     agreeAll() {
-      this.$refs["sign-agree-modal"].hide();
-      this.$refs["sign-waiting-modal"].show();
-      setTimeout(() => {
-        this.$refs["sign-waiting-modal"].hide();
-      }, 3000);
+      this.$root.$emit('Agreement')
     },
       finishSign() {
        this.$root.$emit('finishSign')
