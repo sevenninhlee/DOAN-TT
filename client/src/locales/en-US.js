@@ -479,7 +479,7 @@ export default {
       information: 'Please verify the signature information.',
       press: 'Press the button below to go to the page that can be signed.',
       document: 'Document name:',
-      contract: 'Hong Gil-dong salary contract',
+      contract: 'Ninh Lee salary contract',
       content: 'Checking and Signing Content',
       amet: 'Continuous Improvement lorem ipsum sit dollor amet',
       share: 'Do not share links with email.',

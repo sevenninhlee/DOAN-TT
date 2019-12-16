@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        List User
+        List Contarcts
         <small></small>
       </h1>
     </section>

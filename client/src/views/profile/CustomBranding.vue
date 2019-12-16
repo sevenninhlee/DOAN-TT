@@ -167,11 +167,11 @@
                   </div>
                   <div class="doc-item doc-top-border d-flex border-bottom-0 signer">
                     <div class="comments min-width-124px">Signer 1:</div>
-                    <span>Hong Gil-dong (kim@modusign.co.kr)</span>
+                    <span>Ninh Lee (ninhlee@gmail.com)</span>
                   </div>
                   <div class="doc-item d-flex signer">
                     <div class="comments min-width-124px">Signer 2:</div>
-                    <span>Continuous Improvement lorem ipsum sit dollor amet (hong@modusign.co.kr)</span>
+                    <span>Continuous Improvement lorem ipsum sit dollor amet (ninhlee@gmail.com)</span>
                   </div>
                   <b-button
                     block
