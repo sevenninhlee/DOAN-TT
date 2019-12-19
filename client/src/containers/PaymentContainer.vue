@@ -34,12 +34,12 @@
           <SidebarToggler ref="sidebarToggleBtn" class="d-lg-none" display="md" mobile />
           <!-- <SidebarToggler class="d-md-down-none" display="lg" :defaultOpen=true /> -->
           <UpgradePlan class="d-none d-sm-block"></UpgradePlan>
-          <div class="your-cur-plan">
+          <!-- <div class="your-cur-plan">
             <span class="comments ml-3 mr-1">{{ $t('layout.payment.header.comments') }}</span>
             <span>
               <UserIcon icon="smile.png" class="mr-2" />{{ $t('layout.payment.header.icon') }}
             </span>
-          </div>
+          </div> -->
           <div class="sign-doc-type">
             <div
               class="clickable-icon mx-1 mx-1 mx-sm-2 mx-md-2 mx-lg-4"
@@ -181,11 +181,11 @@ export default {
           url: "/signature",
           icon: "fa fa-pencil"
         },
-        {
-          name: "Pricing Plan",
-          url: "/payment/upgrade-plan",
-          icon: "fa fa-tag"
-        },
+        // {
+        //   name: "Pricing Plan",
+        //   url: "/payment/upgrade-plan",
+        //   icon: "fa fa-tag"
+        // },
         {
           name: "Branding",
           url: "/profile/custom-branding",

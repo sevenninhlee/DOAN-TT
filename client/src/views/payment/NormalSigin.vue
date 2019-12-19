@@ -31,7 +31,7 @@
             <div class="upgrade-content">
               <div class="upgrade-to">{{ $t("home.user.plan.title") }}</div>
               <div class="comments">{{ $t("home.user.plan.comments") }}</div>
-              <b-link class="click-here" v-on:click="upgradePlan()">{{ $t("home.user.plan.click") }}</b-link>
+              <b-link class="click-here" >{{ $t("home.user.plan.click") }}</b-link>
             </div>
           </div>
         </div>

@@ -31,8 +31,8 @@
               @input="inputMessage"
             ></b-form-textarea>
           </b-form-group>
-          <div class="subtitle">{{ $t("docsign.review.expiration") }}</div>
-          <div class="d-flex align-items-center mt-3">
+          <!-- <div class="subtitle">{{ $t("docsign.review.expiration") }}</div> -->
+          <!-- <div class="d-flex align-items-center mt-3">
             <span>{{ $t("docsign.review.request.expire") }}</span>
             <b-input class="ml-3" value="120" style="width: 75px" v-model="review_form.expiration"></b-input>
           </div>
@@ -42,7 +42,7 @@
               <strong>{{$t('May 1, 2020')}}</strong> {{ $t("docsign.review.request.at") }}
               <strong>{{$t('6:59:59 AM')}}</strong>
             </span>
-          </div>
+          </div> -->
         </div>
         <div class="col-right-pannel">
           <div class="content-card">

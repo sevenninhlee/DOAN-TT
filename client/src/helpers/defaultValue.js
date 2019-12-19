@@ -9,11 +9,11 @@ export const landingNavList = [
     url: "/signature",
     icon: "fa fa-pencil"
   },
-  {
-    name: "Pricing Plan",
-    url: "/payment/upgrade-plan",
-    icon: "fa fa-tag"
-  },
+  // {
+  //   name: "Pricing Plan",
+  //   url: "/payment/upgrade-plan",
+  //   icon: "fa fa-tag"
+  // },
   {
     name: "Branding",
     url: "/profile/custom-branding",

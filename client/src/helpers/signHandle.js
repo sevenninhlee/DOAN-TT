@@ -684,7 +684,7 @@ export const prepareTools = [
   { name: "company", label: "Company", icon: "fa fa-building" },
   { name: "title", label: "Title", icon: "fa fa-briefcase" },
   { name: "text", label: "Text", icon: "fa fa-file-text" },
-  { name: "date_signed", label: "Date Signed", icon: "fa fa-calendar" },
+  // { name: "date_signed", label: "Date Signed", icon: "fa fa-calendar" },
   // { name: "attachments", label: "Attachments", icon: "fa fa-paperclip" }
 ];
 

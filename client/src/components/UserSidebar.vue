@@ -58,7 +58,7 @@ export default {
       { name: "Company", icon: "fa fa-building" },
       { name: "Title", icon: "fa fa-briefcase" },
       { name: "Text", icon: "fa fa-file-text" },
-      { name: "Date Signed", icon: "fa fa-calendar" },
+      // { name: "Date Signed", icon: "fa fa-calendar" },
       { name: "Initials", icon: "initial.png", img_mode: true},
       { name: "Stamp", icon: "stamp.png", img_mode: true},
       // { name: "Attachments", icon: "fa fa-paperclip" },

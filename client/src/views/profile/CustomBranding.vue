@@ -55,7 +55,7 @@
               </div>
             </div>
           </div>
-          <div class="content-card">
+          <!-- <div class="content-card">
             <div class="content-header">
               <strong>Sender’s Info - You can customize sender’s information here:</strong>
             </div>
@@ -74,7 +74,7 @@
               <b-button class="mr-4" variant="link" v-on:click="cancelName()">Cancel</b-button>
               <b-button variant="primary" v-on:click="saveName()">Save Changes</b-button>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

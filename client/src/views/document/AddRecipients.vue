@@ -140,9 +140,9 @@
               </div>
             </div>
             <b-form-group>
-              <b-form-checkbox
+              <!-- <b-form-checkbox
                 v-model="recipient.set_password"
-              >{{ $t("docsign.recipients.password") }}</b-form-checkbox>
+              >{{ $t("docsign.recipients.password") }}</b-form-checkbox> -->
             </b-form-group>
             <div class="row" v-if="recipient.set_password">
               <div class="col-md-6">

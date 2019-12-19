@@ -282,16 +282,16 @@ const router = new Router({
           name: "TemplateList",
           component: TemplateList
         },
-        {
-          path: "upgrade-plan",
-          name: "UpgradeYourPlan",
-          component: UpgradeYourPlan
-        },
-        {
-          path: "pricing-plan",
-          name: "PricingPlan",
-          component: PricingPlan
-        },
+        // {
+        //   path: "upgrade-plan",
+        //   name: "UpgradeYourPlan",
+        //   component: UpgradeYourPlan
+        // },
+        // {
+        //   path: "pricing-plan",
+        //   name: "PricingPlan",
+        //   component: PricingPlan
+        // },
         {
           path: "upgrade-to-plan",
           name: "UpgradeToPlan",
