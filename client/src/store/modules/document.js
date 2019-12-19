@@ -6,7 +6,9 @@ const ADD_DOCUMENT_URL = 'document';
 const GET_DOCUMENT_URL = 'document';
 const REMOVE_DOCUMENT_DETAIL_URL = 'document/del_detail';
 const GET_DOCUMENT_BY_DOC_ID_URL = 'document/get-by/document-id';
+const GET_DOCUMENT_BY_DOC_ID_SIGN_URL = 'document/get-by/document-id-sign';
 const GET_RECIPIENTS_URL = 'recipients/by-document-id';
+const GET_RECIPIENTS_SIGN_URL = 'recipients/by-document-id-sign';
 const ADD_ANNTATION_URL = 'annotation/add-new';
 const GET_ANNTATION_URL = 'annotation/get-by/document-id';
 const DELETE_ANNTATION_URL = 'annotation';
@@ -28,6 +30,7 @@ export const ADD_DOCUMENT_ERROR = 'ADD_DOCUMENT_ERROR';
 export const ADD_DOCUMENT_SUCCESS = 'ADD_DOCUMENT_SUCCESS';
 
 export const GET_DOCUMENT_REQUEST = 'GET_DOCUMENT_REQUEST';
+export const GET_DOCUMENT_REQUEST_SIGN = 'GET_DOCUMENT_REQUEST_SIGN';
 export const GET_DOCUMENT_ERROR = 'GET_DOCUMENT_ERROR';
 export const GET_DOCUMENT_SUCCESS = 'GET_DOCUMENT_SUCCESS';
 
@@ -47,6 +50,7 @@ export const GET_ANNTATION = 'GET_ANNTATION';
 export const DELETE_ANNTATION = 'DELETE_ANNTATION';
 
 export const GET_RECIPIENTS = 'GET_RECIPIENTS';
+export const GET_RECIPIENTS_SIGN = 'GET_RECIPIENTS_SIGN';
 
 export const GET_LIST_DOCUMENTS_REQUEST = 'GET_LIST_DOCUMENTS_REQUEST';
 export const GET_LIST_DOCUMENTS_ERROR = 'GET_LIST_DOCUMENTS_ERROR';
@@ -59,6 +63,10 @@ const state = {
     loading: false,
   },
   [GET_DOCUMENT_REQUEST]: {
+    data: [],
+    loading: false,
+  },
+  [GET_DOCUMENT_REQUEST_SIGN]: {
     data: [],
     loading: false,
   },
@@ -75,6 +83,7 @@ const getters = {
     }
   },
   [GET_DOCUMENT_REQUEST]: state => state[GET_DOCUMENT_REQUEST],
+  [GET_DOCUMENT_REQUEST_SIGN]: state => state[GET_DOCUMENT_REQUEST_SIGN],
   [DOCUMENT_FILES]: state => state[DOCUMENT_FILES],
   getListDocs: state => state.listDocuments
 }
@@ -135,6 +144,17 @@ const actions = {
         })
     })
   },
+  [GET_RECIPIENTS_SIGN]: ({ commit, dispatch }, document_id) => {
+    return new Promise((resolve, reject) => {
+      get(`${GET_RECIPIENTS_SIGN_URL}?document_id=${document_id}`)
+        .then(resp => {
+          resolve(resp.data)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  },
   [ADD_ANNTATION]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       post(ADD_ANNTATION_URL, data)
@@ -176,6 +196,21 @@ const actions = {
       commit(GET_DOCUMENT_REQUEST);
       let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');;
       get(`${GET_DOCUMENT_BY_DOC_ID_URL}?${queryString}`)
+        .then(resp => {
+          resp && resp.data && resp.data.list && commit(GET_DOCUMENT_SUCCESS, resp.data.list);
+          resolve(resp.data);
+        })
+        .catch(err => {
+          commit(GET_DOCUMENT_ERROR, err)
+          reject(err)
+        })
+    })
+  },
+  [GET_DOCUMENT_REQUEST_SIGN]: ({ commit, dispatch }, params) => {
+    return new Promise((resolve, reject) => {
+      commit(GET_DOCUMENT_REQUEST_SIGN);
+      let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');;
+      get(`${GET_DOCUMENT_BY_DOC_ID_SIGN_URL}?${queryString}`)
         .then(resp => {
           resp && resp.data && resp.data.list && commit(GET_DOCUMENT_SUCCESS, resp.data.list);
           resolve(resp.data);
@@ -274,6 +309,18 @@ const mutations = {
   },
   [GET_DOCUMENT_ERROR]: (state) => {
     state[GET_DOCUMENT_REQUEST].loading = false;
+  },
+
+  // get document sign
+  [GET_DOCUMENT_REQUEST_SIGN]: (state) => {
+    state[GET_DOCUMENT_REQUEST_SIGN].loading = true;
+  },
+  [GET_DOCUMENT_SUCCESS]: (state, data) => {
+    state[GET_DOCUMENT_REQUEST_SIGN].loading = false;
+    state[GET_DOCUMENT_REQUEST_SIGN].data = data;
+  },
+  [GET_DOCUMENT_ERROR]: (state) => {
+    state[GET_DOCUMENT_REQUEST_SIGN].loading = false;
   },
 
   // list document files

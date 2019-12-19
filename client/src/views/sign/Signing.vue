@@ -117,7 +117,7 @@
             </div>
           </div>
           <div class="text-center">
-            <b-button variant="link" class="mr-0 mr-sm-5" >Finish later</b-button>
+            <!-- <b-button variant="link" class="mr-0 mr-sm-5" >Finish later</b-button> -->
             <b-button variant="other" class="px-2 px-sm-5" v-on:click="finishSign()" >Finish</b-button>
           </div>
         </div>
@@ -434,7 +434,7 @@ import { mapGetters } from "vuex";
 import UserIcon from "../../components/UserIcon";
 import UserSelect from "../../components/UserSelect";
 import {
-  GET_DOCUMENT_REQUEST,
+  GET_DOCUMENT_REQUEST_SIGN,
   GET_BLOD_FROM_URL,
   ADD_ANNTATION,
   GET_ANNTATION,
@@ -442,7 +442,7 @@ import {
   DELETE_ANNTATION,
   ADD_ROTATE_DOCUMENTS,
   ADD_DELETE_DOCUMENTS,
-  GET_RECIPIENTS
+  GET_RECIPIENTS_SIGN
 } from "../../store/modules/document";
 import store from "../../store/store";
 import { GET_DOCS, AUTH_LOADING } from "../../store/actions.type";
@@ -485,7 +485,7 @@ export default {
     GenerateSvg: () => import('../../components/common/GenerateSvg')
   },
   computed: {
-    ...mapGetters(["addDocument", [GET_DOCUMENT_REQUEST], "getRecipients", 'USER', 'SIGNATURES', 'loading', 'errors'])
+    ...mapGetters(["addDocument", [GET_DOCUMENT_REQUEST_SIGN], "getRecipients", 'USER', 'SIGNATURES', 'loading', 'errors'])
   },
   mixins: [signing, svgstyles],
   data() {
@@ -611,16 +611,9 @@ export default {
     });
 
      this.$root.$on('finishSign', () => {
-          this.openAgreeModal(); 
-    })
+          // this.openAgreeModal(); 
 
-    this.$root.$on('Agreement', () => {
-          
-      this.$refs["sign-agree-modal"].hide();
-      this.$refs["sign-waiting-modal"].show();
-      store.dispatch(AUTH_LOADING, true);
-
-      let array_data = [];
+    let array_data = [];
         let annotations_user = this.annotations.filter(v => v.actor_id === Number(recipient_id) && v.type_tools !== 'signature' && v.type_tools !== 'stamp' );
         
         for (let i = 0; i < annotations_user.length; i++) {
@@ -636,17 +629,15 @@ export default {
         console.log("annotations_user", annotations_user);
         
         if (array_data.length === annotations_user.length) {
-            vm.createSignValue(array_data)
+          this.createSignValue(array_data)
             .then(response => {
               store.dispatch(AUTH_LOADING, false)
-              setTimeout(() => {
-                this.$refs["sign-waiting-modal"].hide();
-              }, 3000);
             
           })
           .catch(errors => {
             console.log(errors)
           });
+            this.openAgreeModal();
 
         } else {
           vm.$toast.warn({
@@ -654,8 +645,51 @@ export default {
             message: "Please check signature and input value!"
           })
         }
- 
+
     })
+
+    // this.$root.$on('Agreement', () => {
+          
+    //   this.$refs["sign-agree-modal"].hide();
+    //   this.$refs["sign-waiting-modal"].show();
+    //   store.dispatch(AUTH_LOADING, true);
+
+    //   let array_data = [];
+    //     let annotations_user = this.annotations.filter(v => v.actor_id === Number(recipient_id) && v.type_tools !== 'signature' && v.type_tools !== 'stamp' );
+        
+    //     for (let i = 0; i < annotations_user.length; i++) {
+    //       const element = annotations_user[i];
+    //       if ($(`#input_value_${element.id}`).val()) {
+    //         array_data.push( {
+    //         annotation_id: element.id,
+    //         value: $(`#input_value_${element.id}`).val()
+    //         });
+    //       }
+    //     }
+
+    //     console.log("annotations_user", annotations_user);
+        
+    //     if (array_data.length === annotations_user.length) {
+    //         vm.createSignValue(array_data)
+    //         .then(response => {
+    //           store.dispatch(AUTH_LOADING, false)
+    //           setTimeout(() => {
+    //             this.$refs["sign-waiting-modal"].hide();
+    //           }, 3000);
+            
+    //       })
+    //       .catch(errors => {
+    //         console.log(errors)
+    //       });
+
+    //     } else {
+    //       vm.$toast.warn({
+    //         title: "Signature and input value requied",
+    //         message: "Please check signature and input value!"
+    //       })
+    //     }
+ 
+    // })
 
     store
       .dispatch(GET_DOCS, document_id)
@@ -664,7 +698,7 @@ export default {
       })
       .catch(err => {});
     store
-      .dispatch(GET_RECIPIENTS, vm.$route.query.document_id)
+      .dispatch(GET_RECIPIENTS_SIGN, vm.$route.query.document_id)
       .then(res => {
         if (res.status && res.list) {
           vm.items = res.list.map((item, key) => {
@@ -696,9 +730,9 @@ export default {
       vm.documentList = [];
 
       store
-        .dispatch(GET_DOCUMENT_REQUEST, { document_id, show_image: 1 })
+        .dispatch(GET_DOCUMENT_REQUEST_SIGN, { document_id, show_image: 1 })
         .then(res => {
-          vm.documentList = vm[GET_DOCUMENT_REQUEST];
+          vm.documentList = vm[GET_DOCUMENT_REQUEST_SIGN];
           if (
             vm.documentList &&
             vm.documentList.data &&
@@ -776,7 +810,11 @@ export default {
       this.$refs["sign-agree-modal"].hide();
     },
     agreeAll() {
-      this.$root.$emit('Agreement')
+      this.cancelAgree()
+      this.$refs["sign-waiting-modal"].show();
+       setTimeout(() => {
+        this.$refs["sign-waiting-modal"].hide();
+      }, 3000);
     },
       finishSign() {
        this.$root.$emit('finishSign')

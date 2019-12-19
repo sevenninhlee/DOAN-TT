@@ -55,6 +55,9 @@ Route::prefix('document')->middleware('auth:api')->group(function () {
     Route::post('/add-rotate-page', 'Api\DocumentsController@addRotatePage');
 });
 
+Route::prefix('document')->group(function () {
+    Route::get('/get-by/document-id-sign', 'Api\DocumentsController@getDocumentByID');
+});
 
 // Route::put('/drequest/{doc_id}', 'Api\DocumentsController@editSignRequest')->middleware('auth:api');
 // Route::delete('/drequest/{doc_id}', 'Api\DocumentsController@deleteSignRequest')->middleware('auth:api');
@@ -129,6 +132,11 @@ Route::prefix('recipients')->middleware('auth:api')->group(function () {
     Route::get('/by-document-id', 'Api\RecipientController@getRecipientByDocumentId');
     Route::post('/sent-email-recipient', 'Api\RecipientController@sentEmailReview');
     Route::post('/get-kakao-friends', 'Api\RecipientController@kakaoFriends');
+});
+
+//recipients sign
+Route::prefix('recipients')->group(function () {
+    Route::get('/by-document-id-sign', 'Api\RecipientController@getRecipientByDocumentId');
 });
 
 //email_styles
