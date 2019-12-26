@@ -266,7 +266,7 @@ export function generalDefaultButton(annotations, recipientsList, recipient_id) 
         let tool = prepareTools.find(v => v.name === annotation.type_tools);
         const page_num = annotation.page_num;
         let _dropableContentId = `${droppableContent}${page_num}`;
-        let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y}px; z-index: 11; width: 143px; height: 31px;`;
+        let element_style = `position: absolute; color: ${annotation.actor.color}; background: #fff; border: 1px solid ${annotation.actor.color}; left: ${annotation.pos_x}px; top: ${annotation.pos_y + 5}px; z-index: 11; width: 143px; height: 31px;`;
   
         let new_element = `
           <span

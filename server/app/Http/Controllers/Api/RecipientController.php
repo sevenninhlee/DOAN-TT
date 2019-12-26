@@ -133,20 +133,7 @@ class RecipientController extends Controller
                         ]);
                     }
                 }
-                // else{
-                //     try {
-                //         // $url = rq::root().'/api/pdf/export?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
-                //         $url = env('CLIENT_URL', 'http://localhost:8080/#').'/sign/prepare/?recipient_id='.$recipient['id'].'&document_id='.$data['document_id'];
-                //         $info['url_document'] = $url;
-                //         Mail::to($recipient['email'] )->send(new SendMailRecipient($info));
-                //         // break;
-                //     } catch (\Throwable $th) {
-                //         return response()->json([
-                //             'status' => false,
-                //             'msg' => $th
-                //         ]);
-                //     }
-                // }
+             
             } else {
                 $uuid = $recipient['uuid'];
                 $response = Curl::to('https://kapi.kakao.com/v1/api/talk/friends/message/default/send')
