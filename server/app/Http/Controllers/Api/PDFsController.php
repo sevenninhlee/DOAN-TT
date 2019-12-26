@@ -36,7 +36,8 @@ class PDFsController extends Controller
 
         // return $list;
 
-        $annotations = [];
+
+        $annotations = [];  
         $document = null;
         foreach ($list as $document) {  
             $document = $document;
@@ -55,8 +56,8 @@ class PDFsController extends Controller
         // return $pageCount;
         foreach (range(1, $pageCount) as $i) {
             $pdf->AddPage();
-
             $page = $i;
+           
             $tplId = $pdf->importPage($page);
             $size = $pdf->getTemplateSize($tplId);
             // return $size;
@@ -64,7 +65,9 @@ class PDFsController extends Controller
             
             $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
             $pdf->setJPEGQuality(75);
-            // dd($pdf);
+
+            // dd("111111111");
+            // $pdf->Write(1, "<span >CoffeeSign Envoloped ID: 64343EAB33-C3234-43</span>");  
 
             foreach ($annotations as $annotation) {
                 if (intval($annotation->page_num) == $page) {
@@ -83,10 +86,24 @@ class PDFsController extends Controller
                     // print_r($annotation->pos_y);
                     // print_r("<br/>");
                     // $pdf->SetXY(intval($annotation->pos_x), intval($annotation->pos_y));
-                    $pdf->SetXY(intval($annotation->pos_x), intval($annotation->pos_y));
-                    switch ($annotation->type) {
-                    case 'text':
-                        $pdf->Write($page, "THIS IS TEXT");
+                    $pdf->SetXY(intval($annotation->pos_x), intval($annotation->pos_y + 3));
+                    
+                    switch ($annotation->type_tools) {
+                    case 'signature':
+                        // echo "Start <br/>"; echo '<pre>'; print_r(public_path().'/storage/'.$annotation->image_url);echo '</pre>';exit("End Data");
+                        $pdf->SetXY(intval($annotation->pos_x -12), intval($annotation->pos_y - 7));    
+                        $pdf->Image(public_path().'/storage/'.$annotation->image_url, '', '', intval($annotation->size_w -100 ), intval($annotation->size_h), '', '',
+                            'T', false, 300, '', false, false, 1, false, false, false
+                        );
+                        break;
+                    case 'stamp':
+                        $pdf->SetXY(intval($annotation->pos_x -12), intval($annotation->pos_y - 12));
+                        $pdf->Image(public_path().'/storage/'.$annotation->image_url, '', '', intval($annotation->size_w - 100), intval($annotation->size_h), '', '',
+                            'T', false, 100, '', false, false, false, false, false, false
+                        );
+                        break;
+                    case 'company'|| 'text' || 'full_name' || 'title':
+                        $pdf->Write($page, $annotation->value);
                         break;
                     case 'checkbox':
                         $pdf->CheckBox($annotation->annotation_id, 5, true, array(), array(), 'OK');
@@ -94,17 +111,14 @@ class PDFsController extends Controller
                     case 'radiobutton':
                         $pdf->RadioButton('radio', 5, array(), array(), 'OK');
                         break;
-                    case 'image':
-                        $pdf->Image(public_path().'/i001.jpg', '', '', intval($annotation->size_w), intval($annotation->size_h), '', '',
-                            'T', false, 300, '', false, false, 1, false, false, false
-                        );
-                        break;
+                  
                     }
                 }
             }
         }
         // return "ok";
         $pathToFile = public_path().'/export_documents/'.$document_id.'.pdf';
+
         $pdf->Output($pathToFile, 'F');
         return response()->file($pathToFile);
     }

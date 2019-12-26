@@ -93,7 +93,7 @@
                   </div>
                   <div class="d-flex align-items-center">
                     <div class="col-status">
-                      <div :class="getStyleRecipients(recip.status)">{{recip.status}}</div>
+                      <div :class="getStyleRecipients(recip)">{{recip.status}}</div>
                     </div>
                     <div class="col-last-change">
                       <div class="date">{{ recip.date | dateParse('YYYY-MM-DD HH:mm:ss') | dateFormat('DD.MM.YYYY') }}</div>
@@ -336,6 +336,8 @@ export default {
       return "status completed";
     },
     getStyleRecipients(status){
+      console.log("111111111111", JSON.parse(JSON.stringify( this.doc_list)));
+      
       if(status == 'Completed') {
         return "status completed"
       } else if(status == 'Waiting to sign') {

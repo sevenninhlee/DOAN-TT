@@ -8,7 +8,13 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
 use App\Annotation;
+use Request as rq;
 use App\User;
+use Mail;
+use App\Recipient;
+use App\Mail\SendMailSigned;
+use App\Document;
+use App\DocumentDetail;
 
 class SigningController extends Controller
 {
@@ -69,8 +75,12 @@ class SigningController extends Controller
         ], 422);
       }
 
+      
+      $annotation_data = [];
+
        foreach ($sign_value as $value) {
         $annotation = Annotation::find($value['annotation_id']);
+        $annotation_data = $annotation;
         if ($annotation == null) {
             return response(null, 400);
         }
@@ -78,9 +88,28 @@ class SigningController extends Controller
         $annotation->save();
        }
        
-       
+
+
+        $creator = $annotation = User::find($annotation_data['creator_id']);
+        $actor = $annotation = Recipient::find($annotation_data['actor_id']);
+        $document_data = Document::find($annotation_data['doc_id']);
+
+        $document_data_de = DocumentDetail::find($document_data['document_id']);
+
+        $info['subject'] =  'Completed: '.$document_data_de['name'];
+        $info['message'] = "";
+        $info['url_root'] = rq::root();
+        $info['recipients'] = [];
+
+        $url = rq::root().'/api/pdf/export?recipient_id='.$actor['id'].'&document_id='.$document_data['document_id'];
+
+        $info['url_document'] = $url;
         
-      //  echo "Start <br/>"; echo '<pre>'; print_r($value['annotation_id']);echo '</pre>';exit("End Data");        
+        //  echo "11111";
+        // echo "Start <br/>"; echo '<pre>'; print_r($creator['email']);echo '</pre>';exit("End Data"); 
+
+        Mail::to($actor['email'] )->send(new SendMailSigned($info));
+
         
         $response = $this->successfulMessage(201, 'Successfully updated', true, 1, []);
 
