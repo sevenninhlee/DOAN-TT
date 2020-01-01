@@ -25,14 +25,14 @@
             <div class="action-type">{{ $t("home.user.action.typeRight") }}</div>
           </div>
           <div class="user-plan">
-            <div>
+            <!-- <div>
               <img src="img/payment/upgrad.png" />
-            </div>
-            <div class="upgrade-content">
+            </div> -->
+            <!-- <div class="upgrade-content">
               <div class="upgrade-to">{{ $t("home.user.plan.title") }}</div>
               <div class="comments">{{ $t("home.user.plan.comments") }}</div>
               <b-link class="click-here" >{{ $t("home.user.plan.click") }}</b-link>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -73,10 +73,10 @@
                 <b-button variant="link" block class="upload-initials">{{ $t("home.upload") }}</b-button>
               </span>
             </div>
-            <div class="text-right">
+            <!-- <div class="text-right">
               <b-button variant="link" class="mr-1">{{ $t("home.replace") }}</b-button>|
               <b-button variant="link" class="ml-1">{{ $t("home.remove") }}</b-button>
-            </div>
+            </div> -->
           </div>
           <div class="row">
             <div class="col-6 pr-1">
@@ -93,10 +93,10 @@
                     <b-button variant="link" block class="upload-initials">{{ $t("home.upload") }}</b-button>
                   </span>
                 </div>
-                <div class="text-right">
+                <!-- <div class="text-right">
                   <b-button variant="link" class="mr-1">{{ $t("home.replace") }}</b-button>|
                   <b-button variant="link" class="ml-1">{{ $t("home.remove") }}</b-button>
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="col-6 pl-1">
@@ -113,10 +113,10 @@
                     <b-button variant="link" block class="upload-initials">{{ $t("home.upload") }}</b-button>
                   </span>
                 </div>
-                <div class="text-right">
+                <!-- <div class="text-right">
                   <b-button variant="link" class="mr-1">{{ $t("home.replace") }}</b-button>|
                   <b-button variant="link" class="ml-1">{{ $t("home.remove") }}</b-button>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

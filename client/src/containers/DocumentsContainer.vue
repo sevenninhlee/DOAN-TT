@@ -7,13 +7,7 @@
           <div class="w-100">
             <b-button block variant="primary" v-on:click="gotoPage('/landing')">{{ $t('layout.documents.sidebar.button') }}</b-button>
 
-            <b-button
-              variant="primary"
-              class="d-block d-sm-none"
-              block
-              style="padding-top: 0.5rem;"
-              to="/payment/pricing-plan"
-            >{{ $t('layout.button') }}</b-button>
+          
             <div class="prepare-tool-nav" v-if="show_tool_menu">
               <hr class="seperate-bar" />
               <UserSidebarEx :navItems="nav" @dragTool="dragTool"></UserSidebarEx>

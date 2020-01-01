@@ -336,7 +336,7 @@
 
           <div class="footer">
             <div class="summary">
-              {{ $t('signature.modal.tncStamp') }}
+              <!-- {{ $t('signature.modal.tncStamp') }} -->
             </div>
             <div class="buttons">
               <b-button variant="link" v-on:click="hideStampModal">

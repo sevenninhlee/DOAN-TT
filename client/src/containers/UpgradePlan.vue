@@ -1,6 +1,4 @@
 <template>
-  <b-button variant="primary" class="ml-3" >{{$t('layout.button')}}</b-button>
-  <!-- v-on:click="upgradePlan()" -->
 </template>
 
 <script>
