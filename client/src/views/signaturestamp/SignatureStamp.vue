@@ -287,9 +287,7 @@
         </div>
         <hr />
         <div class="footer">
-          <div class="summary">
-            {{ $t('signature.modal.tncSign') }}
-          </div>
+         
           <div class="buttons">
             <b-button variant="link" v-on:click="hideSignatureModal">
               <span>
@@ -486,7 +484,7 @@
         <hr />
         <div class="footer">
           <div class="summary">
-            {{ $t('signature.modal.tncStamp') }}
+            <!-- {{ $t('signature.modal.tncStamp') }} -->
           </div>
           <div class="buttons">
             <b-button variant="link" v-on:click="hideStampModal">

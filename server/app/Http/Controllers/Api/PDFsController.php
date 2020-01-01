@@ -8,14 +8,15 @@ use App\Http\Controllers\Controller;
 use setasign\Fpdi;
 use setasign\FpdfTpl;
 use Imagick;
+use App\Tcpdf;
 use Request as rq;
 
 use App\Document;
 use App\DocumentAction;
+use Illuminate\Support\Str;
 use App\Annotation;
 use NcJoes\OfficeConverter\OfficeConverter;
 use Illuminate\Support\Facades\Storage;
-
 
 class PDFsController extends Controller
 {
@@ -47,11 +48,20 @@ class PDFsController extends Controller
             break;
         }
 
+
+
+        // $encrypter = app('Illuminate\Contracts\Encryption\Encrypter');
+        // $encrypted = $encrypter->encrypt('Hello, Universe');
+
+
+        $uuid = Str::uuid()->toString();
+
         // return $annotations;
         // print_r($annotations);
-        $pdf = new Fpdi\TcpdfFpdi();
+        $pdf = new Tcpdf($uuid);
         $pdf->setPrintHeader(false);
-        // $pdf = new \setasign\Fpdi\Fpdi();
+
+
         $pageCount = $pdf->setSourceFile(public_path().'/storage/'.$document->document_file);
         // return $pageCount;
         foreach (range(1, $pageCount) as $i) {
@@ -98,7 +108,7 @@ class PDFsController extends Controller
                         break;
                     case 'stamp':
                         $pdf->SetXY(intval($annotation->pos_x -12), intval($annotation->pos_y - 12));
-                        $pdf->Image(public_path().'/storage/'.$annotation->image_url, '', '', intval($annotation->size_w - 100), intval($annotation->size_h), '', '',
+                        $pdf->Image(public_path().'/storage/'.$annotation->image_url, '', '', intval($annotation->size_w - 200), intval($annotation->size_h), '', '',
                             'T', false, 100, '', false, false, false, false, false, false
                         );
                         break;

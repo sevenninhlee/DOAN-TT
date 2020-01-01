@@ -235,9 +235,6 @@
         </div>
         <hr />
         <div class="footer">
-          <div
-            class="summary"
-          >By clicking Create, I agree that the signature and initials will be the electronic representation of my signature and initials for all purposes when I (or my agent) use them on envelopes, including legally binding contracts - just the same as a pen-and-paper signature or initial.</div>
           <div class="buttons">
             <b-button variant="link" v-on:click="hideSignatureModal">
               <span>
@@ -359,9 +356,6 @@
         </div>
         <hr />
         <div class="footer">
-          <div
-            class="summary"
-          >By clicking Adding, I agree that the Stamp will be the electronic representation of my Stamp for all purposes when I (or my agent) use them on envelopes, including legally binding contracts - just the same as a pen-and-paper stamp.</div>
           <div class="buttons">
             <b-button variant="link" v-on:click="hideStampModal">
               <span>

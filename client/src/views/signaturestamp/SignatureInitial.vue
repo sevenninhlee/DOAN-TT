@@ -323,7 +323,7 @@
 
           <div class="footer">
             <div class="summary">
-              {{ $t('signature.modal.tncSign') }}
+              <!-- {{ $t('signature.modal.tncSign') }} -->
             </div>
             <div class="buttons">
               <b-button variant="link" v-on:click="hideSignInitialModal">

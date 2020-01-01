@@ -8,13 +8,6 @@
             <b-button block variant="other" v-on:click="gotoStartPage()">
               {{ getSelected('temp')=="selected" ? "Create Template" :  $t('layout.payment.sidebar.button')  }}
             </b-button>
-            <b-button
-              variant="primary"
-              class="d-block d-sm-none"
-              block
-              style="padding-top: 0.5rem;"
-              v-on:click="gotoPage('/payment/pricing-plan'); toggleSidebar();"
-            >{{ $t('layout.button') }}</b-button>
             <div class="prepare-tool-nav">
               <hr class="seperate-bar" />
               <SidebarNav :navItems="computedNav"></SidebarNav>
